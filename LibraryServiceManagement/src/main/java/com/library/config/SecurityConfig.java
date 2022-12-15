@@ -38,7 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] ALLOW_POST_ALL_URLS = {
             "api/user/resetPassword/**",
-            "api/user/savePassword/**"
+            "api/user/savePassword/**",
+            "/api/user/save/**",
     };
 
     private static final String[] ALLOW_POST_USER_URLS = {
@@ -54,7 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] ALLOW_POST_ADMIN_URLS = {
-            "/api/user/save/**",
             "api/role/addtouser/**",
             "api/book/save/**",
             "/api/upload"
