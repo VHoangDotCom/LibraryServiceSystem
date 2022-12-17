@@ -26,10 +26,10 @@ public class LibraryServiceManagementApplication {
     CommandLineRunner runner(UserService userService) {
         return args -> {
 
-            userService.saveUser(new User(null, "John Deep", "john", "1234","john@gmail.com","1.png","Hanoi",User.AccountStatus.ACTIVE, new ArrayList<>()));
-            userService.saveUser(new User(null, "Will Smith", "will", "1234","will@gmaol.com","2.png","Hanoi",User.AccountStatus.BLACKLISTED, new ArrayList<>()));
-            userService.saveUser(new User(null, "Jim Carry", "jim", "1234","hoangnvth2010033@fpt.edu.vn","3.png","Hanoi",User.AccountStatus.CANCELED, new ArrayList<>()));
-            userService.saveUser(new User(null, "Viet Hoang", "hoang", "hoang","viethoang2001gun@gmail.com","4.png","Hanoi",User.AccountStatus.CLOSED, new ArrayList<>()));
+            userService.saveUser(new User(null, "John Deep", "john", "1234","john@gmail.com","1.png","Hanoi",User.AccountStatus.ACTIVE, User.Provider.LOCAL, new ArrayList<>()));
+            userService.saveUser(new User(null, "Will Smith", "will", "1234","will@gmaol.com","2.png","Hanoi",User.AccountStatus.BLACKLISTED, User.Provider.LOCAL, new ArrayList<>()));
+            userService.saveUser(new User(null, "Jim Carry", "jim", "1234","hoangnvth2010033@fpt.edu.vn","3.png","Hanoi",User.AccountStatus.CANCELED, User.Provider.LOCAL, new ArrayList<>()));
+            userService.saveUser(new User(null, "Viet Hoang", "hoang", "hoang","viethoang2001gun@gmail.com","4.png","Hanoi",User.AccountStatus.CLOSED, User.Provider.LOCAL, new ArrayList<>()));
 
             //userService.addRoleToUser("john@gmail.com", "ROLE_USER");
             userService.addRoleToUser("will@gmaol.com", "ROLE_MANAGER");

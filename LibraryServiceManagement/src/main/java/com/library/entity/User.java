@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
+import java.security.Provider;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -31,7 +32,16 @@ public class User {
 
     private String avatar;
     private String address;
+
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+    public enum Provider {
+        LOCAL, GOOGLE
+    }
+
 
     public enum AccountStatus{
         ACTIVE ,

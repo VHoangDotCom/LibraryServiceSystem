@@ -149,4 +149,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return users;
     }
 
+    @Override
+    public void processOAuthPostLogin(String username) {
+        User existUser = userRepo.getUserByUsername(username);
+
+        if (existUser == null) {
+            User newUser = new User();
+            newUser.setUsername(username);
+            newUser.setProvider(User.Provider.GOOGLE);
+            newUser.setStatus(User.AccountStatus.ACTIVE);
+
+            userRepo.save(newUser);
+        }
+
+    }
+
 }

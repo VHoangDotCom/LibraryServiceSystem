@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,17 @@ public class UserController {
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
+    }
+
+    @GetMapping("/google/account")
+    public Principal GetGoogleLoginInformation(Principal principal){
+        System.out.println("User name: " + principal.getName());
+        return principal;
+    }
+
+    @GetMapping("/google/welcome")
+    public String WelcomeByGoogleLogin(){
+        return "Welcome to Google!";
     }
 
     @PostMapping("/role/save")

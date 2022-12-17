@@ -1,0 +1,12 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 155720770869-mo7mca5tcjc1h0t89ah7f8cnnggkgf4t.apps.googleusercontent.com
+            client-secret: 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
+
+server:
+  port: 8080
+

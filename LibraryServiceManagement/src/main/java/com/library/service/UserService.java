@@ -35,4 +35,7 @@ public interface UserService {
 
     //Export data
     List<User> exportUserToExcel(HttpServletResponse response) throws IOException;
+
+    //Oauth config
+    public void processOAuthPostLogin(String username);
 }
