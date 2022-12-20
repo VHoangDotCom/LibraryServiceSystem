@@ -10,6 +10,7 @@ import com.library.entity.User;
 import com.library.entity.email.MailRequest;
 import com.library.model.PasswordModel;
 import com.library.model.RoleToUserModel;
+import com.library.repository.UserRepository;
 import com.library.service.MailService;
 import com.library.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,12 +42,41 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
     @Autowired
     private MailService mailService;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
+    }
+
+    @GetMapping("/user/username/{username}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username){
+        if(userService.getUser(username) == null){
+            return ResponseEntity.ok().body("Username "+username+" is not existed !");
+        }else {
+            return ResponseEntity.ok().body(userService.getUser(username));
+        }
+    }
+
+    @GetMapping("/user/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email){
+        if(userService.findUserByEmail(email) == null){
+            return ResponseEntity.ok().body("User with email "+email+" is not existed !");
+        }else {
+            return ResponseEntity.ok().body(userService.findUserByEmail(email));
+        }
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable Long id){
+        if(userRepository.findById(id) == null){
+            return ResponseEntity.ok().body("User with id "+id+" is not existed !");
+        }else {
+            return ResponseEntity.ok().body(userRepository.findById(id));
+        }
     }
 
     @PostMapping("/user/save")

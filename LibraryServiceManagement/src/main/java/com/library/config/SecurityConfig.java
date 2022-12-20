@@ -26,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    //All Roles
     private static final String[] ALLOW_ALL_URLS = {
             "/api/login/**",
             "/api/token/refresh",
@@ -33,7 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/book/{id}/**",
             "/api/users/export-to-excel",
             "/api/download/{fileId}",
-            "/api/menus/search?keyword=**"
+            "/api/menus/search?keyword=**",
+            "/api/user/{id}",
+            "/api/user/username/{username}",
+            "/api/user/email/{email}",
     };
 
     private static final String[] ALLOW_POST_ALL_URLS = {
@@ -42,12 +46,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/user/save/**",
     };
 
+    //User Role
     private static final String[] ALLOW_POST_USER_URLS = {
-            "api/user/changePassword"
+
     };
 
     private static final String[] ALLOW_GET_USER_URLS = {
-            "/api/user/**"
+            "/api/user/**",
+    };
+
+    private static final String[] ALLOW_GET_MEMBER_URLS = {
+
+            "api/user/changePassword"
+    };
+
+    private static final String[] ALLOW_POST_MEMBER_URLS = {
+
     };
 
     private static final String[] ALLOW_GET_ADMIN_URLS = {
@@ -84,6 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(POST, ALLOW_POST_ALL_URLS ).permitAll();
         http.authorizeRequests().antMatchers(POST, ALLOW_POST_USER_URLS ).hasAnyAuthority("USER");
         http.authorizeRequests().antMatchers(GET, ALLOW_GET_USER_URLS ).hasAnyAuthority("USER");
+        http.authorizeRequests().antMatchers(POST, ALLOW_POST_MEMBER_URLS ).hasAnyAuthority("MEMBER");
+        http.authorizeRequests().antMatchers(GET, ALLOW_GET_MEMBER_URLS ).hasAnyAuthority("MEMBER");
         http.authorizeRequests().antMatchers(GET, ALLOW_GET_ADMIN_URLS ).hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(POST, ALLOW_POST_ADMIN_URLS ).hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(PUT, ALLOW_PUT_ADMIN_URLS ).hasAnyAuthority("ADMIN");
