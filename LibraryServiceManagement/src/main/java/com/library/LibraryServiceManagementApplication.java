@@ -37,7 +37,7 @@ public class LibraryServiceManagementApplication {
             userService.addRoleToUser("viethoang2001gun@gmail.com", "USER");
             //ADMIN  LIBRARIAN  MEMBER  USER
             userService.addRoleToUser("viethoang2001gun@gmail.com", "ADMIN");
-            userService.addRoleToUser("will@gmaol.com", "USER");
+            userService.addRoleToUser("john@gmail.com", "USER");
         };
     }
 }

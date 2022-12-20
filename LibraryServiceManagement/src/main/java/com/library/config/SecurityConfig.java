@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/categories/add/**",
 
             //Book
-            "/api/books/add/**",
+            "/api/books/add/{cateId}",
     };
 
     private static final String[] ALLOW_PUT_ADMIN_URLS = {

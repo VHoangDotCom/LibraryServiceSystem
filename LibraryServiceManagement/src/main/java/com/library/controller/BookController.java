@@ -36,9 +36,9 @@ public class BookController {
         }
     }
 
-    @PostMapping("/books/add")
-    public Book createBook(@RequestBody Book book) {
-        return bookService.createBook(book);
+    @PostMapping("/books/add/{cateId}")
+    public Book createBook(@RequestBody Book book, @PathVariable Long cateId) {
+        return bookService.createBook(book, cateId);
     }
 
     @DeleteMapping("/books/delete/{id}")

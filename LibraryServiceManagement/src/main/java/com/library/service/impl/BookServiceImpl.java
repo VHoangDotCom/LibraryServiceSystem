@@ -19,14 +19,19 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
+    private CategoryRepository categoryRepository;
+
     public BookServiceImpl(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
     @Override
-    public Book createBook(Book book) {
+    public Book createBook(Book book, Long cateId) {
         Calendar cal = Calendar.getInstance();
         book.setCreatedAt(cal.getTime());
+
+        Category category = categoryRepository.findById(cateId).get();
+        book.setCategory(category);
         bookRepository.save(book);
         return book;
     }

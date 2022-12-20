@@ -6,7 +6,7 @@ import com.library.entity.Category;
 import java.util.List;
 
 public interface BookService {
-    Book createBook(Book book);
+    Book createBook(Book book, Long cateId);
 
     List<Book> getAllBooks();
 
