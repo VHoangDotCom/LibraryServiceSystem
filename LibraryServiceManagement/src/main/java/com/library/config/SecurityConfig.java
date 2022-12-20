@@ -35,13 +35,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/users/export-to-excel",
             "/api/download/{fileId}",
             "/api/menus/search?keyword=**",
-            "/api/user/{id}",
             "/api/user/username/{username}",
             "/api/user/email/{email}",
 
             //Category
             "/api/categories",
             "/api/category/{id}",
+
+            //Book
+            "/api/books",
+            "/api/book/{id}",
     };
 
     private static final String[] ALLOW_POST_ALL_URLS = {
@@ -56,11 +59,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] ALLOW_GET_USER_URLS = {
             "/api/user/**",
+
     };
 
     private static final String[] ALLOW_GET_MEMBER_URLS = {
 
-            "api/user/changePassword"
+            "api/user/changePassword",
+            "/api/user/{id}",
+            "/api/user/profile"
     };
 
     private static final String[] ALLOW_POST_MEMBER_URLS = {
@@ -68,7 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] ALLOW_GET_ADMIN_URLS = {
-            "/api/users"
+            "/api/users",
+            "/api/user/{id}",
     };
 
     private static final String[] ALLOW_POST_ADMIN_URLS = {
@@ -78,15 +85,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             //Category
             "/api/categories/add/**",
+
+            //Book
+            "/api/books/add/**",
     };
 
     private static final String[] ALLOW_PUT_ADMIN_URLS = {
-            "/api/book/save/{id}/**",
+            "/api/books/save/{id}/**",
             "/api/categories/save/{id}/**",
     };
 
     private static final String[] ALLOW_DELETE_ADMIN_URLS = {
-            "/api/book/{id}/**",
+            "/api/books/delete/{id}/**",
             "/api/categories/delete/{id}/**"
     };
 

@@ -94,6 +94,22 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    public void sendMailWithoutAttachment(String toEmail, String body, String subject) throws MessagingException {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        MimeMessageHelper mimeMessageHelper
+                = new MimeMessageHelper(mimeMessage, true);
+
+        mimeMessageHelper.setFrom("anhhvth2010043@fpt.edu.vn");
+        mimeMessageHelper.setTo(toEmail);
+        mimeMessageHelper.setText(body);
+        mimeMessageHelper.setSubject(subject);
+
+        mailSender.send(mimeMessage);
+        System.out.println("Mail Send...");
+    }
+
+    @Override
     public MailResponse sendMailWithTemplate(MailRequest request, Map<String, Object> model) {
         MailResponse response = new MailResponse();
         MimeMessage message = mailSender.createMimeMessage();

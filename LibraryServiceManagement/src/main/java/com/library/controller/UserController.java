@@ -97,6 +97,34 @@ public class UserController {
           return userService.addRoleToUser(toUserModel.getEmail(), toUserModel.getRoleName());
     }
 
+    @GetMapping("/user/profile")
+    public ResponseEntity<?> getProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            try {
+                String refresh_token = authorizationHeader.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(refresh_token);
+                String username = decodedJWT.getSubject();
+                User user = userService.getUser(username);
+
+               return ResponseEntity.ok().body(user);
+            } catch (Exception exception) {
+                response.setHeader("error", exception.getMessage());
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                Map<String, String> error = new HashMap<>();
+                error.put("access_message", exception.getMessage());
+                response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
+            }
+        } else {
+            //throw new RuntimeException("Access token is missing !");
+            return  ResponseEntity.ok().body(new RuntimeException("Access token is missing !"));
+        }
+        return ResponseEntity.ok().body("");
+    }
+
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -154,13 +182,12 @@ public class UserController {
             String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
             url = passwordResetTokenMail(user, applicationUrl(request), token);
-            mailService.sendMailWithAttachment(
+            mailService.sendMailWithoutAttachment(
                     "" + user.getEmail(),
                     "\tIf you have send Reset Password Request, please enter this link to reset your password: \n "+ url +
                             "\t( This link will be disabled after 10 minutes. )" +
                             "\n\n\tIf you are not the one who had send request to us, please check your Account's Security.",
-                    "Hi "  + " from Maleficent System!",
-                    "E:\\epc\\Meme pics\\Anya Meme.jpg"
+                    "Hi "  + " from Maleficent System!"
             );
         } else {
             return "User with entered email is not existed!";
