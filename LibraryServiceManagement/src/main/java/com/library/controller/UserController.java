@@ -33,6 +33,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*")
 @EnableScheduling
 @Slf4j
 @RestController
@@ -71,7 +72,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<?> getUserByEmail(@PathVariable Long id){
+    public ResponseEntity<?> getUserByID(@PathVariable Long id){
         if(userRepository.findById(id) == null){
             return ResponseEntity.ok().body("User with id "+id+" is not existed !");
         }else {

@@ -38,6 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/user/{id}",
             "/api/user/username/{username}",
             "/api/user/email/{email}",
+
+            //Category
+            "/api/categories",
+            "/api/category/{id}",
     };
 
     private static final String[] ALLOW_POST_ALL_URLS = {
@@ -46,7 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/user/save/**",
     };
 
-    //User Role
     private static final String[] ALLOW_POST_USER_URLS = {
 
     };
@@ -71,15 +74,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] ALLOW_POST_ADMIN_URLS = {
             "api/role/addtouser/**",
             "api/book/save/**",
-            "/api/upload"
+            "/api/upload",
+
+            //Category
+            "/api/categories/add/**",
     };
 
     private static final String[] ALLOW_PUT_ADMIN_URLS = {
-            "/api/book/save/{id}/**"
+            "/api/book/save/{id}/**",
+            "/api/categories/save/{id}/**",
     };
 
     private static final String[] ALLOW_DELETE_ADMIN_URLS = {
-            "/api/book/{id}/**"
+            "/api/book/{id}/**",
+            "/api/categories/delete/{id}/**"
     };
 
     @Override
