@@ -32,12 +32,12 @@ public class LibraryServiceManagementApplication {
             userService.saveUser(new User(null, "Viet Hoang", "hoang", "hoang","viethoang2001gun@gmail.com","4.png","Hanoi",User.AccountStatus.CLOSED, new ArrayList<>()));
 
             //userService.addRoleToUser("john@gmail.com", "ROLE_USER");
-            userService.addRoleToUser("will@gmaol.com", "ROLE_MANAGER");
-            userService.addRoleToUser("hoangnvth2010033@fpt.edu.vn", "ROLE_ADMIN");
-            userService.addRoleToUser("viethoang2001gun@gmail.com", "ROLE_SUPER_ADMIN");
+            userService.addRoleToUser("will@gmaol.com", "MEMBER");
+            userService.addRoleToUser("hoangnvth2010033@fpt.edu.vn", "LIBRARIAN");
+            userService.addRoleToUser("viethoang2001gun@gmail.com", "ADMIN");
             //userService.addRoleToUser("viethoang2001gun@gmail.com", "ROLE_USER");
-            userService.addRoleToUser("viethoang2001gun@gmail.com", "ROLE_ADMIN");
-            userService.addRoleToUser("will@gmaol.com", "ROLE_ADMIN");
+            userService.addRoleToUser("viethoang2001gun@gmail.com", "ADMIN");
+            userService.addRoleToUser("will@gmaol.com", "LIBRARIAN");
         };
     }
 }

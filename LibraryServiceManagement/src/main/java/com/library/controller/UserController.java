@@ -62,9 +62,8 @@ public class UserController {
     }
 
     @PostMapping("/role/addtouser")
-    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserModel toUserModel) {
-        userService.addRoleToUser(toUserModel.getEmail(), toUserModel.getRoleName());
-        return ResponseEntity.ok().body("Adding role " + toUserModel.getRoleName() + " to " + toUserModel.getEmail() + " successfully!");
+    public String addRoleToUser(@RequestBody RoleToUserModel toUserModel) throws Exception {
+          return userService.addRoleToUser(toUserModel.getEmail(), toUserModel.getRoleName());
     }
 
     @GetMapping("/token/refresh")

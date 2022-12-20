@@ -58,7 +58,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("Saving new user {} to the database", user.getName());
 
         //Account auto has role 'User' whenever created
-        Role role = roleRepository.findByName("ROLE_USER");
+        Role role = roleRepository.findByName("MEMBER");
+
+        //Check if existed user
+        User existedUser = new User();
+
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
@@ -74,11 +78,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void addRoleToUser(String email, String roleName) {
-        log.info("Adding role {} to user {}", roleName, email);
+    public String addRoleToUser(String email, String roleName) {
         User user = userRepo.findByEmail(email);
         Role role = roleRepository.findByName(roleName);
-        user.getRoles().add(role);
+        if(user == null) {
+            return "Cannot find User with email: " +email+" !";
+        }if(role == null){
+            return "Role "+roleName+" is not existed !";
+        }if(user != null && role != null){
+            if( user.getRoles().contains(role)){
+                return "User " + email + " has already have role " + roleName + " !";
+            }
+            user.getRoles().add(role);
+            log.info("Adding role " + roleName + " to " + email + " successfully!");
+            return "Adding role " + roleName + " to " + email + " successfully!";
+        }
+        return "";
     }
 
     @Override

@@ -38,12 +38,16 @@
 - Header : Thêm trường Authorization
   Value : Bearer access_token_khi_login  ( access token phải là của Admin )
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671280297/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_add_role_to_user_dlsttf.png)
+
 - Body (raw -> json):
   {
   "email": "will@gmaol.com",
   "roleName": "ROLE_MANAGER"
   }
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671280297/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_add_role_to_user1_xy1gtu.png)
+
+- Trong trường hợp nhập sai tên Role hoặc sai email người dùng => hệ thống báo lỗi
+- Trong trường hợp User đã có Role đó mà add lại lần nx => hệ thống báo lỗi
 
 5. Reser password
 - Step 1: http://localhost:8080/api/user/resetPassword
