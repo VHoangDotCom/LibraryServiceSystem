@@ -98,13 +98,11 @@
 - Hiện tại chưa phân quyền
 ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671512367/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_user_by_ID_j6vtqm.png)
 
-
 4. Get User detail by Username
 - http://localhost:8080/api/user/username/jim
 - Get
 - Hiện tại chưa phân quyền
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671512367/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_user_by_username_ueo2yz.png)
-
 
 5. Get User detail by Email
 - http://localhost:8080/api/user/email/viethoang2001gun@gmail.com
@@ -112,9 +110,54 @@
 - Hiện tại chưa phân quyền
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671512367/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_user_by_email_enxvom.png)
 
-
 3. Export User data to Excel
 - http://localhost:8080/api/users/export-to-excel
 - Get
 - Copy đường link lên browser
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671280296/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_export_user_list_to_excel_xsp8wf.png)
+
+
+## Category
+1. Create new Category
+- http://localhost:8080/api/categories/add
+- Post
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522553/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Create_Category1_ohxjcv.png)
+
+- Body:
+  {
+  "name": "Math 12"
+  }
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522553/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Create_Category_uglehc.png)
+
+2. Get List Categories
+- http://localhost:8080/api/categories
+- Get
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522554/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_List_category_ilnrar.png)
+
+3. Get Category By ID
+- http://localhost:8080/api/category/1
+- Get
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522553/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Category_by_ID_elpzjc.png)
+
+4. Update Category By ID
+- http://localhost:8080/api/categories/save/1
+- Put
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522553/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Update_Category_by_ID1_kkrvqs.png)
+
+- Body:
+  {
+  "name": "Math 12"
+  }
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522553/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Update_Category_by_ID_mkzujr.png)
+
+5. Delete Category By ID
+- http://localhost:8080/api/categories/delete/1
+- Delete
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522553/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Delete_Category_by_ID_vcp1g0.png)
+
