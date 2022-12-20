@@ -92,6 +92,27 @@
   Value : Bearer access_token_khi_login  ( access token phải là của Admin )
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671280296/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_get_user_list_lqejey.png)
 
+3. Get User detail by ID
+- http://localhost:8080/api/user/3
+- Get
+- Hiện tại chưa phân quyền
+![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671512367/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_user_by_ID_j6vtqm.png)
+
+
+4. Get User detail by Username
+- http://localhost:8080/api/user/username/jim
+- Get
+- Hiện tại chưa phân quyền
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671512367/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_user_by_username_ueo2yz.png)
+
+
+5. Get User detail by Email
+- http://localhost:8080/api/user/email/viethoang2001gun@gmail.com
+- Get
+- Hiện tại chưa phân quyền
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671512367/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_user_by_email_enxvom.png)
+
+
 3. Export User data to Excel
 - http://localhost:8080/api/users/export-to-excel
 - Get
