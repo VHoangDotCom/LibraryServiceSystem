@@ -18,10 +18,10 @@ public class RoleSeeding {
     }
 
     private List<Role> roles = Arrays.asList(
-            new Role("ROLE_USER"),
-            new Role("ROLE_MANAGER"),
-            new Role("ROLE_ADMIN"),
-            new Role("ROLE_SUPER_ADMIN")
+            new Role("USER"),
+            new Role("MEMBER"),
+            new Role("LIBRARIAN"),
+            new Role("ADMIN")
     );
 
     @PostConstruct
