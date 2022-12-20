@@ -13,6 +13,9 @@ public interface MailService {
     void sendMailWithAttachment(String toEmail, String body, String subject, String attachment)
             throws MessagingException;
 
+    void sendMailWithoutAttachment(String toEmail, String body, String subject)
+            throws MessagingException;
+
     void sendMultipleMail(String toEmail, String body, String subject)
             throws MessagingException;
 
