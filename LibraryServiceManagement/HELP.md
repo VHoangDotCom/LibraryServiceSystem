@@ -110,11 +110,18 @@
 - Hiện tại chưa phân quyền
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671512367/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_user_by_email_enxvom.png)
 
-3. Export User data to Excel
+6. Export User data to Excel
 - http://localhost:8080/api/users/export-to-excel
 - Get
 - Copy đường link lên browser
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671280296/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_export_user_list_to_excel_xsp8wf.png)
+
+7. Get User profile
+- http://localhost:8080/api/user/profile
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token là của User đăng nhập )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671548012/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_User_Profile_nfpew7.png)
 
 
 ## Category
