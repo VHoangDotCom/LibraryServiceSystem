@@ -161,3 +161,8 @@
   Value : Bearer access_token_khi_login  ( access token phải là của Admin )
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522553/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Delete_Category_by_ID_vcp1g0.png)
 
+
+## Book (Thao tác như Category )
+1. Get List Books
+- http://localhost:8080/api/books
+- Get

@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
-@EnableScheduling
 @Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class BookController {
-    private final BookRepository bookRepository;
+   /* private final BookRepository bookRepository;
     private final BookService bookService;
 
     @GetMapping("/books")
@@ -36,8 +35,8 @@ public class BookController {
         }
     }
 
-    @PostMapping("/books/add/{cateId}")
-    public Book createBook(@RequestBody Book book, @PathVariable Long cateId) {
+    @PostMapping("/categories/{cateId}/books")
+    public Book createBook(@RequestBody Book book, @PathVariable(value = "cateId") Long cateId) {
         return bookService.createBook(book, cateId);
     }
 
@@ -46,11 +45,12 @@ public class BookController {
         return ResponseEntity.ok(bookService.deleteBook(id));
     }
 
-    @PutMapping("/books/save/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id,
+    @PutMapping("/categories/{cateId}/books/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable (value = "id") Long id,
+                                                   @PathVariable(value = "cateId") Long cateId,
                                                    @RequestBody Book book) {
-        book = bookService.updateBook(id, book);
+        book = bookService.updateBook(id,book,cateId);
         return ResponseEntity.ok(book);
     }
-
+*/
 }

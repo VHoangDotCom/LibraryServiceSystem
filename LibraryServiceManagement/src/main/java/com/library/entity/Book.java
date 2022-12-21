@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,18 +32,30 @@ public class Book {
     private String detail;
     private String author;
     private int amount;
+    private int price;
+
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
 
     private Date createdAt;
     private Date updatedAt;
     private Date publishedAt;
 
-    @ManyToOne(
-            cascade = CascadeType.REMOVE
-    )
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
             name = "category_id",
-            referencedColumnName = "categoryId"
+            referencedColumnName = "categoryId",
+            nullable = false
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Category category;
+
+    public enum BookStatus{
+        OUT_OF_STOCK,
+        AVAILABLE,
+        UNAVAILABLE,
+        UPDATING
+    }
 
 }

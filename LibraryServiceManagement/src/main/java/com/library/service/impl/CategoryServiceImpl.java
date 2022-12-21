@@ -1,9 +1,12 @@
 package com.library.service.impl;
 
 import com.library.entity.Category;
+import com.library.exception.ResourceNotFoundException;
 import com.library.repository.CategoryRepository;
 import com.library.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +33,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll();
     }
 
+   /* @Override
+    public Page<Category> getAllCategories(Pageable pageable) {
+        log.info("Fetching all categories");
+        return categoryRepository.findAll(pageable);
+    }*/
+
     @Override
     public String deleteCategory(Long id) {
         Category category = categoryRepository.findById(id).get();
@@ -43,9 +52,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category updateCategory(Long id, Category category) {
-        Category categoryExisted = categoryRepository.findById(id).get();
+        return categoryRepository.findById(id).map(
+                category1 -> {
+                    category1.setName(category.getName());
+                    return categoryRepository.save(category1);
+                }
+        ).orElseThrow(() -> new ResourceNotFoundException("CategoryID" , "id",id));
+        /*Category categoryExisted = categoryRepository.findById(id).get();
         categoryExisted.setName(category.getName());
-        categoryRepository.save(categoryExisted);
-        return category;
+        categoryRepository.save(categoryExisted);*/
+        //return category;
     }
 }
