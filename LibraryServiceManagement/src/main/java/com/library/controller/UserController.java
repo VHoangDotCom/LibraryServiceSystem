@@ -33,12 +33,13 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*")
+
 @EnableScheduling
 @Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000/")
 public class UserController {
 
     private final UserService userService;

@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @EnableScheduling
 @Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000/")
 public class CategoryController {
     private final CategoryRepository categoryRepository;
     private final CategoryService categoryService;

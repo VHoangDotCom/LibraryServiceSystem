@@ -2,8 +2,11 @@ package com.library.controller;
 
 
 import com.library.entity.Book;
+import com.library.entity.Category;
 import com.library.repository.BookRepository;
+import com.library.repository.CategoryRepository;
 import com.library.service.BookService;
+import com.library.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +15,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @EnableScheduling
 @Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000/")
 public class BookController {
     private final BookRepository bookRepository;
     private final BookService bookService;
+
+    private final CategoryRepository categoryRepository;
 
     @GetMapping("/books")
     public List<Book> getAllBooks() {
@@ -37,7 +42,10 @@ public class BookController {
     }
 
     @PostMapping("/books/add")
-    public Book createBook(@RequestBody Book book) {
+    public Book createBook(@RequestParam("categoryId") Long categoryId ,@RequestBody Book book) {
+        Category categoryFind = categoryRepository.findById(categoryId).get();
+        book.setCategory(categoryFind);
+        System.out.println(book);
         return bookService.createBook(book);
     }
 
