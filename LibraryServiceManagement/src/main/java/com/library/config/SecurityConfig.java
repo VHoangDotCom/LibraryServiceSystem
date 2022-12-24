@@ -14,6 +14,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpMethod.DELETE;
@@ -30,9 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] ALLOW_ALL_URLS = {
             "/api/login/**",
             "/api/token/refresh",
-            "/api/books/**",
-            "/api/book/{id}/**",
-            "/api/users/export-to-excel",
             "/api/download/{fileId}",
             "/api/menus/search?keyword=**",
             "/api/user/username/{username}",
@@ -63,19 +65,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] ALLOW_GET_MEMBER_URLS = {
-
-            "api/user/changePassword",
             "/api/user/{id}",
             "/api/user/profile"
     };
 
     private static final String[] ALLOW_POST_MEMBER_URLS = {
-
+            "/api/user/changePassword",
     };
 
     private static final String[] ALLOW_GET_ADMIN_URLS = {
             "/api/users",
             "/api/user/{id}",
+            "/api/users/export-to-excel",
     };
 
     private static final String[] ALLOW_POST_ADMIN_URLS = {
@@ -105,11 +106,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http.csrf().disable();
+        http.cors().and();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests().antMatchers( ALLOW_ALL_URLS ).permitAll();

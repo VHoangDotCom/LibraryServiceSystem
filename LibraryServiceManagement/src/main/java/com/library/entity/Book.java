@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,6 +32,11 @@ public class Book {
     private String detail;
     private String author;
     private int amount;
+    private int price;
+    private int borrowPrice;
+
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
 
     private Date createdAt;
     private Date updatedAt;
@@ -42,5 +50,12 @@ public class Book {
             referencedColumnName = "categoryId"
     )
     private Category category;
+
+    public enum BookStatus{
+        OUT_OF_STOCK,
+        AVAILABLE,
+        UNAVAILABLE,
+        UPDATING
+    }
 
 }

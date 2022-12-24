@@ -168,3 +168,60 @@
   Value : Bearer access_token_khi_login  ( access token phải là của Admin )
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671522553/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Delete_Category_by_ID_vcp1g0.png)
 
+
+## Book (Thao tác như Category )
+1. Get List Books
+- http://localhost:8080/api/books
+- Get
+
+2. Get Book by ID
+- http://localhost:8080/api/book/1
+- Get
+
+3. Create new Book by CategoryID
+- http://localhost:8080/api/books/add?categoryId=1
+- Post
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text]()
+
+
+- Body:
+  {
+  "title": "How to rob a bank",
+  "subject": "Science",
+  "publisher": "Kim Dong",
+  "language": "english",
+  "thumbnail": "1.jpg",
+  "detail": "This is a nice book",
+  "author": "Hoang anh",
+  "price": 300,
+  "amount": 30,
+  "borrowPrice": 50,
+  "publishedAt": "2022-12-24T04:34:24.783+00:00"
+  }
+  ![alt text]()
+
+4. Update Book by ID and CategoryID
+- http://localhost:8080/api/books/save/1?categoryId=2
+- Put
+- Header : Thêm trường Authorization
+    Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+    ![alt text]()
+
+- Body:
+  {
+  "title": "How to rob a bank",
+  "subject": "Science",
+  "publisher": "Kim Dong",
+  "language": "english",
+  "thumbnail": "1.jpg",
+  "detail": "This is a nice book",
+  "author": "Hoang anh",
+  "price": 300,
+  "amount": 30,
+  "borrowPrice": 50,
+  "publishedAt": "2022-12-24T04:34:24.783+00:00"
+  }
+  ![alt text]()
+

@@ -2,6 +2,7 @@ package com.library.service.impl;
 
 import com.library.entity.Book;
 import com.library.entity.Category;
+import com.library.exception.ResourceNotFoundException;
 import com.library.repository.BookRepository;
 import com.library.repository.CategoryRepository;
 import com.library.service.BookService;
@@ -19,6 +20,8 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
+    private CategoryRepository categoryRepository;
+
     public BookServiceImpl(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
@@ -27,14 +30,26 @@ public class BookServiceImpl implements BookService {
     public Book createBook(Book book) {
         Calendar cal = Calendar.getInstance();
         book.setCreatedAt(cal.getTime());
-        bookRepository.save(book);
-        return book;
+        book.setUpdatedAt(cal.getTime());
+        book.setStatus(Book.BookStatus.AVAILABLE);
+        return bookRepository.save(book);
+
+      /*  return categoryRepository.findById(cateId).map(category -> {
+            book.setCategory(category);
+            return bookRepository.save(book);
+        }).orElseThrow(() -> new ResourceNotFoundException("Create Book","CateId",cateId));*/
     }
 
     @Override
     public List<Book> getAllBooks() {
         log.info("Fetching all categories");
         return bookRepository.findAll();
+    }
+
+    @Override
+    public List<Book> getAllBookByCategoryID(Long cateID) {
+        log.info("Fetching all books by cateID");
+        return  bookRepository.getAllBookByCategoryID(cateID);
     }
 
     @Override
@@ -52,7 +67,7 @@ public class BookServiceImpl implements BookService {
     public Book updateBook(Long id, Book book) {
 
         Calendar cal = Calendar.getInstance();
-        Category category = new Category();
+        book.setUpdatedAt(cal.getTime());
 
         Book bookExisted = bookRepository.findById(id).get();
         bookExisted.setTitle(book.getTitle());
@@ -63,11 +78,16 @@ public class BookServiceImpl implements BookService {
         bookExisted.setDetail(book.getDetail());
         bookExisted.setAuthor(book.getAuthor());
         bookExisted.setAmount(book.getAmount());
-        bookExisted.setUpdatedAt(cal.getTime());
+        bookExisted.setPrice(book.getPrice());
+        bookExisted.setBorrowPrice(book.getBorrowPrice());
+        bookExisted.setStatus(book.getStatus());
+        bookExisted.setUpdatedAt(book.getUpdatedAt());
         bookExisted.setPublishedAt(book.getPublishedAt());
+        bookExisted.setCreatedAt(bookExisted.getCreatedAt());
         bookExisted.setCategory(book.getCategory());
-
         bookRepository.save(bookExisted);
         return book;
+
     }
+
 }

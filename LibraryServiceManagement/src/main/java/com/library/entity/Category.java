@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,4 +22,5 @@ public class Category {
     @NonNull
     @Column(unique = true)
     private String name;
+
 }

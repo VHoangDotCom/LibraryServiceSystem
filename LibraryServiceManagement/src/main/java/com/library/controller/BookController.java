@@ -2,7 +2,9 @@ package com.library.controller;
 
 
 import com.library.entity.Book;
+import com.library.entity.Category;
 import com.library.repository.BookRepository;
+import com.library.repository.CategoryRepository;
 import com.library.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
-@EnableScheduling
+@CrossOrigin(origins = "http://localhost:3000/")
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -21,6 +22,7 @@ import java.util.List;
 public class BookController {
     private final BookRepository bookRepository;
     private final BookService bookService;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping("/books")
     public List<Book> getAllBooks() {
@@ -37,7 +39,10 @@ public class BookController {
     }
 
     @PostMapping("/books/add")
-    public Book createBook(@RequestBody Book book) {
+    public Book createBook(@RequestParam("categoryId") Long categoryId ,@RequestBody Book book) {
+        Category categoryFind = categoryRepository.findById(categoryId).get();
+        book.setCategory(categoryFind);
+        System.out.println(book);
         return bookService.createBook(book);
     }
 
@@ -47,10 +52,11 @@ public class BookController {
     }
 
     @PutMapping("/books/save/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id,
-                                                   @RequestBody Book book) {
+    public ResponseEntity<Book> updateBook(@RequestParam("categoryId") Long categoryId ,@PathVariable Long id,
+                                           @RequestBody Book book) {
+        Category categoryFind = categoryRepository.findById(categoryId).get();
+        book.setCategory(categoryFind);
         book = bookService.updateBook(id, book);
         return ResponseEntity.ok(book);
     }
-
 }

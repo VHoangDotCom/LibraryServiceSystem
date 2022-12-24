@@ -9,6 +9,7 @@ public interface BookService {
     Book createBook(Book book);
 
     List<Book> getAllBooks();
+    List<Book> getAllBookByCategoryID(Long cateID);
 
     String deleteBook(Long id);
 

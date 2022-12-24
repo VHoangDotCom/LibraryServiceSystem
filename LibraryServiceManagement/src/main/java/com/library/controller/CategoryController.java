@@ -5,8 +5,11 @@ import com.library.repository.CategoryRepository;
 import com.library.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +30,11 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
+   /* @GetMapping("/categories")
+    public List<Category> getAllCategories(Pageable pageable) {
+        return (List<Category>) categoryRepository.findAll(pageable);
+    }*/
+
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getCategoryByID(@PathVariable Long id){
         if(categoryRepository.findById(id) == null){
@@ -37,7 +45,7 @@ public class CategoryController {
     }
 
     @PostMapping("/categories/add")
-    public Category createCategory(@RequestBody Category category) {
+    public Category createCategory(@Validated @RequestBody Category category) {
         return categoryService.createCategory(category);
     }
 
