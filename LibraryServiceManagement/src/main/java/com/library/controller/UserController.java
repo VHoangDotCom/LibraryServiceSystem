@@ -81,9 +81,16 @@ public class UserController {
     }
 
     @PostMapping("/user/save")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
+    public ResponseEntity<?> saveUser(@RequestBody User user) {
+        //Check if existed user
+        User existedUser = userService.findUserByEmail(user.getEmail());
+        if(existedUser != null){
+            log.info("Cannot create this account.\n\tEmail has existed!");
+            return ResponseEntity.badRequest().body("Cannot create this account.\n\tEmail has existed!");
+        }else{
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
+            return ResponseEntity.created(uri).body(userService.saveUser(user));
+        }
     }
 
     @PostMapping("/role/save")

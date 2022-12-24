@@ -6,11 +6,12 @@ import com.library.entity.Category;
 import java.util.List;
 
 public interface BookService {
-    Book createBook(Book book, Long cateId);
+    Book createBook(Book book);
 
     List<Book> getAllBooks();
+    List<Book> getAllBookByCategoryID(Long cateID);
 
     String deleteBook(Long id);
 
-    Book updateBook(Long id, Book book, Long cateId);
+    Book updateBook(Long id, Book book);
 }

@@ -55,19 +55,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User saveUser(User user) {
-        log.info("Saving new user {} to the database", user.getName());
-
-        //Account auto has role 'User' whenever created
+        //Account auto has role 'Member' whenever created
         Role role = roleRepository.findByName("MEMBER");
-
-        //Check if existed user
-        User existedUser = new User();
-
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        log.info("Saving new user {} to the database", user.getName());
         return userRepo.save(user);
     }
 

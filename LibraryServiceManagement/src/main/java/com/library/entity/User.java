@@ -32,6 +32,7 @@ public class User {
     private String avatar;
     private String address;
     private AccountStatus status;
+    private int virtualWallet;
 
     public enum AccountStatus{
         ACTIVE ,
@@ -41,7 +42,7 @@ public class User {
         NONE
     }
 
-    public User(String name, @NonNull String username, String password, String email, String avatar, String address, AccountStatus status, Collection<Role> roles) {
+    public User(String name, @NonNull String username, String password, String email, String avatar, String address, AccountStatus status, int virtualWallet, Collection<Role> roles) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -49,6 +50,7 @@ public class User {
         this.avatar = avatar;
         this.address = address;
         this.status = status;
+        this.virtualWallet = virtualWallet;
         this.roles = roles;
     }
 

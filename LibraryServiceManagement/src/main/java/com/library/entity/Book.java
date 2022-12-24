@@ -33,6 +33,7 @@ public class Book {
     private String author;
     private int amount;
     private int price;
+    private int borrowPrice;
 
     @Enumerated(EnumType.STRING)
     private BookStatus status;
@@ -41,14 +42,13 @@ public class Book {
     private Date updatedAt;
     private Date publishedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(
+            cascade = CascadeType.REMOVE
+    )
     @JoinColumn(
             name = "category_id",
-            referencedColumnName = "categoryId",
-            nullable = false
+            referencedColumnName = "categoryId"
     )
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private Category category;
 
     public enum BookStatus{

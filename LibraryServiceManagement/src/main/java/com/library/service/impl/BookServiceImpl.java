@@ -27,21 +27,29 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Book book, Long cateId) {
-        /*Calendar cal = Calendar.getInstance();
-        book.setCreatedAt(cal.getTime());*/
-        //bookRepository.save(book);
+    public Book createBook(Book book) {
+        Calendar cal = Calendar.getInstance();
+        book.setCreatedAt(cal.getTime());
+        book.setUpdatedAt(cal.getTime());
+        book.setStatus(Book.BookStatus.AVAILABLE);
+        return bookRepository.save(book);
 
-        return categoryRepository.findById(cateId).map(category -> {
+      /*  return categoryRepository.findById(cateId).map(category -> {
             book.setCategory(category);
             return bookRepository.save(book);
-        }).orElseThrow(() -> new ResourceNotFoundException("Create Book","CateId",cateId));
+        }).orElseThrow(() -> new ResourceNotFoundException("Create Book","CateId",cateId));*/
     }
 
     @Override
     public List<Book> getAllBooks() {
         log.info("Fetching all categories");
         return bookRepository.findAll();
+    }
+
+    @Override
+    public List<Book> getAllBookByCategoryID(Long cateID) {
+        log.info("Fetching all books by cateID");
+        return  bookRepository.getAllBookByCategoryID(cateID);
     }
 
     @Override
@@ -56,12 +64,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book updateBook(Long id, Book book, Long cateId) {
+    public Book updateBook(Long id, Book book) {
 
-       /* Calendar cal = Calendar.getInstance();
-        Category category = new Category();*/
+        Calendar cal = Calendar.getInstance();
+        book.setUpdatedAt(cal.getTime());
 
-      /*  Book bookExisted = bookRepository.findById(id).get();
+        Book bookExisted = bookRepository.findById(id).get();
         bookExisted.setTitle(book.getTitle());
         bookExisted.setSubject(book.getSubject());
         bookExisted.setPublisher(book.getPublisher());
@@ -70,30 +78,16 @@ public class BookServiceImpl implements BookService {
         bookExisted.setDetail(book.getDetail());
         bookExisted.setAuthor(book.getAuthor());
         bookExisted.setAmount(book.getAmount());
-        bookExisted.setUpdatedAt(cal.getTime());
+        bookExisted.setPrice(book.getPrice());
+        bookExisted.setBorrowPrice(book.getBorrowPrice());
+        bookExisted.setStatus(book.getStatus());
+        bookExisted.setUpdatedAt(book.getUpdatedAt());
         bookExisted.setPublishedAt(book.getPublishedAt());
-        bookExisted.setCategory(book.getCategory());*/
-        /*bookRepository.save(bookExisted);
-        return book;*/
+        bookExisted.setCreatedAt(bookExisted.getCreatedAt());
+        bookExisted.setCategory(book.getCategory());
+        bookRepository.save(bookExisted);
+        return book;
 
-        if(!categoryRepository.existsById(cateId)) {
-            throw new ResourceNotFoundException("Category ID", "cateId", cateId);
-        }
-
-        return bookRepository.findById(id).map(bookUpdate -> {
-            bookUpdate.setTitle(book.getTitle());
-            bookUpdate.setSubject(book.getSubject());
-            bookUpdate.setPublisher(book.getPublisher());
-            bookUpdate.setThumbnail(book.getThumbnail());
-            bookUpdate.setLanguage(book.getLanguage());
-            bookUpdate.setDetail(book.getDetail());
-            bookUpdate.setAuthor(book.getAuthor());
-            bookUpdate.setAmount(book.getAmount());
-            bookUpdate.setPublishedAt(book.getPublishedAt());
-            //bookUpdate.setUpdatedAt(cal.getTime());
-            //bookUpdate.setCategory(book.getCategory());
-            return bookRepository.save(bookUpdate);
-        }).orElseThrow(() -> new ResourceNotFoundException("Create Book","BookId",id));
     }
 
 }

@@ -2,7 +2,9 @@ package com.library.controller;
 
 
 import com.library.entity.Book;
+import com.library.entity.Category;
 import com.library.repository.BookRepository;
+import com.library.repository.CategoryRepository;
 import com.library.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,14 +14,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000/")
 @Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class BookController {
-   /* private final BookRepository bookRepository;
+    private final BookRepository bookRepository;
     private final BookService bookService;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping("/books")
     public List<Book> getAllBooks() {
@@ -35,9 +38,12 @@ public class BookController {
         }
     }
 
-    @PostMapping("/categories/{cateId}/books")
-    public Book createBook(@RequestBody Book book, @PathVariable(value = "cateId") Long cateId) {
-        return bookService.createBook(book, cateId);
+    @PostMapping("/books/add")
+    public Book createBook(@RequestParam("categoryId") Long categoryId ,@RequestBody Book book) {
+        Category categoryFind = categoryRepository.findById(categoryId).get();
+        book.setCategory(categoryFind);
+        System.out.println(book);
+        return bookService.createBook(book);
     }
 
     @DeleteMapping("/books/delete/{id}")
@@ -45,12 +51,12 @@ public class BookController {
         return ResponseEntity.ok(bookService.deleteBook(id));
     }
 
-    @PutMapping("/categories/{cateId}/books/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable (value = "id") Long id,
-                                                   @PathVariable(value = "cateId") Long cateId,
-                                                   @RequestBody Book book) {
-        book = bookService.updateBook(id,book,cateId);
+    @PutMapping("/books/save/{id}")
+    public ResponseEntity<Book> updateBook(@RequestParam("categoryId") Long categoryId ,@PathVariable Long id,
+                                           @RequestBody Book book) {
+        Category categoryFind = categoryRepository.findById(categoryId).get();
+        book.setCategory(categoryFind);
+        book = bookService.updateBook(id, book);
         return ResponseEntity.ok(book);
     }
-*/
 }
