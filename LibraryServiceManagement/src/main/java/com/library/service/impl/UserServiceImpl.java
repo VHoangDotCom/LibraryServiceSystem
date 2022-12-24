@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
+        user.setVirtualWallet(50000);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         log.info("Saving new user {} to the database", user.getName());

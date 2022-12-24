@@ -25,7 +25,7 @@ public class OrderItem {
             cascade = CascadeType.REMOVE
     )
     @JoinColumn(
-            name = "order_id",
+            name = "order_ID",
             referencedColumnName = "orderId"
     )
     private Order order;
