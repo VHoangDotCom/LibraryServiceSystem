@@ -248,6 +248,7 @@
     Value : Bearer access_token_khi_login  ( access token phải là của Admin )
     ![alt text]()
 
+
 3. Create new Order by UserID
 - http://localhost:8080/api/orders/add?userId=4
 - Post
@@ -267,7 +268,7 @@
   }
   ![alt text]()
 
-4. Update Order by ID
+4. Update Order by ID (Quyền Admin Update - chỉ nên update trường status hay các trường ko ảnh hưởng thông tin Khách hàng)
 - http://localhost:8080/api/orders/save?orderID=tqrs9id7Y0
 - Put
 - Header : Thêm trường Authorization
@@ -294,3 +295,16 @@
   Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
   ![alt text]()
 
+6. Get List Orders by UserID
+- http://localhost:8080/api/orders/user?userId=2
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text]()
+
+7. Get List Orders when Logged In (Danh sách Order của tài khoản đăng nhập vào - ko cần truyền ID vào header, chỉ lấy access token)
+- http://localhost:8080/api/orders/user-account
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Tài khoản đăng nhập vào )
+  ![alt text]()

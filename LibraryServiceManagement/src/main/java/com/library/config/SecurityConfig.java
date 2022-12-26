@@ -66,7 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] ALLOW_GET_MEMBER_URLS = {
             "/api/user/{id}",
-            "/api/user/profile"
+            "/api/user/profile",
+            "/api/orders/user-account"
     };
 
     private static final String[] ALLOW_POST_MEMBER_URLS = {
@@ -92,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //Order
             "/api/orders",
             "/api/order/{id}",
-            "/orders/user/**",
+            "/api/orders/user/**",
     };
 
     private static final String[] ALLOW_POST_ADMIN_URLS = {
