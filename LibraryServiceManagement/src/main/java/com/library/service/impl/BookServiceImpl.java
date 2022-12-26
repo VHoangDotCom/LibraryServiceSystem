@@ -86,7 +86,7 @@ public class BookServiceImpl implements BookService {
         bookExisted.setCreatedAt(bookExisted.getCreatedAt());
         bookExisted.setCategory(book.getCategory());
         bookRepository.save(bookExisted);
-        return book;
+        return bookExisted;
 
     }
 

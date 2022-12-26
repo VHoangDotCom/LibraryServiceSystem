@@ -19,16 +19,11 @@ public class Order {
     private String orderId;
     private String fullName;
 
-    @NonNull
     private String email;
-    @NonNull
     private String phoneNumber;
-    @NonNull
     private String address;
     private OrderStatus status;
-    @NonNull
     private int totalDeposit;
-    @NonNull
     private int totalRent;
 
     private Date createdAt;
