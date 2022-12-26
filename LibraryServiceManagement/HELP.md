@@ -225,3 +225,72 @@
   }
   ![alt text]()
 
+5. Delete Book by ID
+- http://localhost:8080/api/books/delete/1
+- Delete
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+  ![alt text]()
+
+
+## Order (Thao tác như Category )
+1. Get List Orders - Role Admin
+- http://localhost:8080/api/orders
+- Get
+- Header : Thêm trường Authorization
+    Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+    ![alt text]()
+
+2. Get Order by ID - Role Admin
+- http://localhost:8080/api/order/tqrs9id7Y0
+- Get
+- Header : Thêm trường Authorization
+    Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+    ![alt text]()
+
+3. Create new Order by UserID
+- http://localhost:8080/api/orders/add?userId=4
+- Post
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Member tro len; userID phai lay cua member khi da dang nhap vao )
+  ![alt text]()
+
+
+- Body:
+  {
+  "fullName": "Viet Hoang",
+  "email": "viethoang2001gun@gmail.com",
+  "phongNumber": "053434343",
+  "address": "23 Hanoi",
+  "totalDeposit": 340000,
+  "totalRent": 34000
+  }
+  ![alt text]()
+
+4. Update Order by ID
+- http://localhost:8080/api/orders/save?orderID=tqrs9id7Y0
+- Put
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+  ![alt text]()
+
+- Body:
+  {
+  "orderId": "eqVzjzIO1k",
+  "fullName": "Viet Hoang-sama",
+  "email": "viethoang2001gun@gmail.com",
+  "phoneNumber": "05343434",
+  "address": "23 Hanoi",
+  "status": "PROCESSING",
+  "totalDeposit": 340000,
+  "totalRent": 34000
+  }
+  ![alt text]()
+
+5. Delete Order by ID
+- http://localhost:8080/api/orders/delete/QIJfM2wyBA
+- Delete
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+  ![alt text]()
+

@@ -60,6 +60,6 @@ public class CategoryServiceImpl implements CategoryService {
         Category categoryExisted = categoryRepository.findById(id).get();
         categoryExisted.setName(category.getName());
         categoryRepository.save(categoryExisted);
-        return category;
+        return categoryExisted;
     }
 }
