@@ -47,12 +47,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //Book
             "/api/books",
             "/api/book/{id}",
+
+            "/",
+            "/pay/**",
+            "/pay/success/**",
+            "/pay/cancel"
     };
 
     private static final String[] ALLOW_POST_ALL_URLS = {
             "api/user/resetPassword/**",
             "api/user/savePassword/**",
             "/api/user/save/**",
+            "/pay/**",
+            "/"
     };
 
     private static final String[] ALLOW_POST_USER_URLS = {

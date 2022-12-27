@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000/")
@@ -46,6 +47,16 @@ public class OrderItemController {
         Book bookFind = bookRepository.findById(bookId).get();
         orderItem.setBook(bookFind);
 
+        //Bug => ko lay dc gia tri ngay => return 0
+        //Ngay muon
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(orderItem.getBorrowedAt());
+        int borrowTime = cal.get(Calendar.DAY_OF_MONTH);
+        //Ngay tra
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(orderItem.getReturnedAt());
+        int returnTime = cal1.get(Calendar.DAY_OF_MONTH);
+
         if(orderItem.getQuantity() >= 10) {
             return ResponseEntity.ok().body("Cannot borrow over 10 book items");
         }else if(orderItem.getQuantity() >= bookFind.getAmount()){
@@ -56,7 +67,7 @@ public class OrderItemController {
             bookRepository.save(bookFind);
             //Update tổng tiền cọc - depositTotal và tổng tiền thuê - rentTotal trong Order
             orderFind.setTotalDeposit(orderFind.getTotalDeposit() + orderItem.getQuantity()*bookFind.getPrice());
-            orderFind.setTotalRent(orderFind.getTotalRent() + orderItem.getQuantity()*bookFind.getBorrowPrice());
+            orderFind.setTotalRent(orderFind.getTotalRent() + orderItem.getQuantity()*bookFind.getBorrowPrice()*(returnTime-borrowTime));
             orderRepository.save(orderFind);
 
             System.out.println(orderItem);
@@ -66,6 +77,27 @@ public class OrderItemController {
 
     @DeleteMapping("/order_items/delete/{id}")
     public ResponseEntity<?> deleteOrderItem(@PathVariable Long id) {
+        OrderItem orderItemExisted = orderItemRepository.findById(id).get();
+        Book bookFind = bookRepository.findById(orderItemExisted.getBook().getId()).get();
+        Order orderFind = orderRepository.findById(orderItemExisted.getOrder().getOrderId()).get();
+
+        //Ngay muon
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(orderItemExisted.getBorrowedAt());
+        int borrowTime = cal.get(Calendar.DAY_OF_MONTH);
+        //Ngay tra
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(orderItemExisted.getReturnedAt());
+        int returnTime = cal1.get(Calendar.DAY_OF_MONTH);
+
+        //Update lại số lượng sách tồn kho
+        bookFind.setAmount(bookFind.getAmount() + orderItemExisted.getQuantity());
+        bookRepository.save(bookFind);
+
+        //Update tổng tiền cọc - depositTotal và tổng tiền thuê - rentTotal trong Order
+        orderFind.setTotalDeposit(orderFind.getTotalDeposit() - orderItemExisted.getQuantity()*bookFind.getPrice());
+        orderFind.setTotalRent(orderFind.getTotalRent() - orderItemExisted.getQuantity()*bookFind.getBorrowPrice()*(returnTime-borrowTime));
+        orderRepository.save(orderFind);
         return ResponseEntity.ok(orderItemService.deleteOrderItem(id));
     }
 
@@ -75,6 +107,15 @@ public class OrderItemController {
         OrderItem orderItemExisted = orderItemRepository.findById(order_itemID).get();
         Book bookFind = bookRepository.findById(orderItemExisted.getBook().getId()).get();
         Order orderFind = orderRepository.findById(orderItemExisted.getOrder().getOrderId()).get();
+
+        //Ngay muon
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(orderItem.getBorrowedAt());
+        int borrowTime = cal.get(Calendar.DAY_OF_MONTH);
+        //Ngay tra
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(orderItem.getReturnedAt());
+        int returnTime = cal1.get(Calendar.DAY_OF_MONTH);
 
         if(orderItem.getQuantity() >= 10) {
             //Trường hợp mượn quá 10 cuốn
@@ -86,7 +127,8 @@ public class OrderItemController {
             bookRepository.save(bookFind);
             //Update tổng tiền cọc - depositTotal và tổng tiền thuê - rentTotal trong Order
             orderFind.setTotalDeposit(orderFind.getTotalDeposit() - (orderItemExisted.getQuantity() - orderItem.getQuantity())*bookFind.getPrice());
-            orderFind.setTotalRent(orderFind.getTotalRent() - (orderItemExisted.getQuantity() - orderItem.getQuantity())*bookFind.getBorrowPrice());
+            orderFind.setTotalRent( orderFind.getTotalRent() -
+                    (orderItemExisted.getQuantity() - orderItem.getQuantity())*bookFind.getBorrowPrice()*(returnTime-borrowTime));
             orderRepository.save(orderFind);
             return ResponseEntity.ok().body(orderItemService.updateOrderItem(order_itemID,orderItem));
         }else {
@@ -100,7 +142,8 @@ public class OrderItemController {
                 bookRepository.save(bookFind);
                 //Update tổng tiền cọc - depositTotal và tổng tiền thuê - rentTotal trong Order
                 orderFind.setTotalDeposit(orderFind.getTotalDeposit() + (orderItem.getQuantity() - orderItemExisted.getQuantity())*bookFind.getPrice());
-                orderFind.setTotalRent(orderFind.getTotalRent() + (orderItem.getQuantity() - orderItemExisted.getQuantity())*bookFind.getBorrowPrice());
+                orderFind.setTotalRent(orderFind.getTotalRent() +
+                        (orderItem.getQuantity() - orderItemExisted.getQuantity())*bookFind.getBorrowPrice()*(returnTime-borrowTime));
                 orderRepository.save(orderFind);
                 return ResponseEntity.ok().body(orderItemService.updateOrderItem(order_itemID,orderItem));
             }
