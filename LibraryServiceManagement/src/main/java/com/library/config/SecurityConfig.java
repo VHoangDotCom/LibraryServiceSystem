@@ -67,22 +67,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] ALLOW_GET_MEMBER_URLS = {
             "/api/user/{id}",
             "/api/user/profile",
-            "/api/orders/user-account"
+            "/api/orders/user-account",
+            "/api/order_items/order/**"
     };
 
     private static final String[] ALLOW_POST_MEMBER_URLS = {
             "/api/user/changePassword",
             "/api/orders/add/**",
+            "/api/order_items/add/**"
 
     };
 
     private static final String[] ALLOW_DELETE_MEMBER_URLS = {
-            "/api/orders/delete/{id}/**"
+            "/api/orders/delete/{id}/**",
+            "/api/order_items/delete/{id}/**"
     };
 
     private static final String[] ALLOW_PUT_MEMBER_URLS = {
             "/api/orders/save/{id}/**",
-            "/api/orders/save/**"
+            "/api/orders/save/**",
+            "/api/order_items/save/**"
     };
 
     private static final String[] ALLOW_GET_ADMIN_URLS = {
@@ -94,6 +98,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/orders",
             "/api/order/{id}",
             "/api/orders/user/**",
+
+            //Order Item
+            "/api/order_items",
+            "/api/order_items/order/**"
     };
 
     private static final String[] ALLOW_POST_ADMIN_URLS = {
@@ -112,6 +120,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] ALLOW_PUT_ADMIN_URLS = {
             "/api/books/save/{id}/**",
             "/api/categories/save/{id}/**",
+            "/api/orders/save/**",
+            "/api/order_items/save/**",
     };
 
     private static final String[] ALLOW_DELETE_ADMIN_URLS = {

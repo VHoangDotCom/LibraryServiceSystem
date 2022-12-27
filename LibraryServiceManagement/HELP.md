@@ -308,3 +308,63 @@
 - Header : Thêm trường Authorization
   Value : Bearer access_token_khi_login  ( access token phải là của Tài khoản đăng nhập vào )
   ![alt text]()
+
+
+
+## OrderItem (Thao tác như Order )
+1. Get List OrderItem - Role Admin
+- http://localhost:8080/api/order_items
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672125709/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_All_OrderItem_Admin_a7je9r.png)
+
+
+2. Create new Order Item by OrderID + BookID
+- Sau khi add Order Item thành công, hệ thống sẽ tự động trường Amount của Book theo Quantity của OrderItem
+- Moi OrderItem khi thue chi toi da 10 quyen (fix cứng)
+- Khi Borrow quá số sách tồn kho => Thông báo ko đủ sách
+- http://localhost:8080/api/order_items/add?orderId=B4dKTpfwjr&bookId=1
+- Post
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Member tro len; userID phai lay cua member khi da dang nhap vao )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672125709/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Create_OrderItem_by_OrderID_BookID_jbrglp.png)
+
+
+- Body:
+  {
+  "quantity": 23,
+  "borrowedAt":"2022-08-01",
+  "returnedAt" : "2022-12-01"
+  }
+  ![alt text]()
+
+3. Update Order Item by ID (Quyền Admin Update - chỉ nên update trường status hay các trường ko ảnh hưởng thông tin Khách hàng)
+- Đọc thêm phần comment hàm OrderItemController/updateOrderItem() để hiểu rõ luồng nghiệp vụ
+- http://localhost:8080/api/order_items/save?order_itemID=1
+- Put
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672125709/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Update_OrderItem_By_ID_hr7yen.png)
+
+- Body:
+  {
+  "quantity": 55,
+  "borrowedAt":"2022-08-01",
+  "returnedAt" : "2022-12-01"
+  }
+  ![alt text]()
+
+4. Delete Order Item by ID ( Member Logged In role )
+- http://localhost:8080/api/order_items/delete/1
+- Delete
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672125709/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Delete_OrderItem_by_ID_tqpxqy.png)
+
+5. Get List Order Items by OrderID ( role la Member dang nhap vao )
+- http://localhost:8080/api/order_items/order?orderID=B4dKTpfwjr
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Member tro len )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672125709/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_All_OrderItem_by_Account_s_Order_th2cfd.png)
