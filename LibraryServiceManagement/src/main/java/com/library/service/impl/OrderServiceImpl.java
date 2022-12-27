@@ -30,6 +30,9 @@ public class OrderServiceImpl implements OrderService {
         order.setCreatedAt(cal.getTime());
         order.setUpdatedAt(cal.getTime());
 
+        order.setTotalRent(0);
+        order.setTotalDeposit(0);
+
         order.setStatus(Order.OrderStatus.PENDING);
 
         return orderRepository.save(order);
@@ -70,8 +73,8 @@ public class OrderServiceImpl implements OrderService {
         orderExisted.setPhoneNumber(order.getPhoneNumber());
         orderExisted.setAddress(order.getAddress());
         orderExisted.setStatus(order.getStatus());
-        orderExisted.setTotalDeposit(order.getTotalDeposit());
-        orderExisted.setTotalRent(order.getTotalRent());
+       /* orderExisted.setTotalDeposit(order.getTotalDeposit());
+        orderExisted.setTotalRent(order.getTotalRent());*/
 
         orderExisted.setUpdatedAt(order.getUpdatedAt());
 
