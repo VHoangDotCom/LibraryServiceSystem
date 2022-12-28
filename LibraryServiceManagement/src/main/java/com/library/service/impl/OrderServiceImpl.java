@@ -2,7 +2,9 @@ package com.library.service.impl;
 
 import com.library.entity.Book;
 import com.library.entity.Order;
+import com.library.entity.User;
 import com.library.repository.OrderRepository;
+import com.library.repository.UserRepository;
 import com.library.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
@@ -16,6 +18,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private OrderRepository orderRepository;
+    private UserRepository userRepository;
 
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -81,4 +84,5 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(orderExisted);
         return orderExisted;
     }
+
 }

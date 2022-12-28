@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         roles.add(role);
         user.setRoles(roles);
         user.setVirtualWallet(50000);
+        user.setAvatar("https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg");
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         log.info("Saving new user {} to the database", user.getName());

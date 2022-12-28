@@ -26,7 +26,7 @@ public class OrderItem {
     private Date returnedAt;
 
     @ManyToOne(
-            cascade = CascadeType.REMOVE
+            //cascade = CascadeType.REMOVE
     )
     @JoinColumn(
             name = "order_ID",
@@ -35,7 +35,7 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne(
-            cascade = CascadeType.REMOVE
+            //cascade = CascadeType.REMOVE
     )
     @JoinColumn(
             name = "book_id",

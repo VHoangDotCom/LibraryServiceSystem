@@ -7,8 +7,10 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.library.entity.Order;
 import com.library.entity.User;
+import com.library.entity.email.MailRequest;
 import com.library.repository.OrderRepository;
 import com.library.repository.UserRepository;
+import com.library.service.MailService;
 import com.library.service.OrderService;
 import com.library.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class OrderController {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final MailService mailService;
 
     @GetMapping("/orders")
     public List<Order> getAllOrders() {
@@ -103,4 +106,42 @@ public class OrderController {
         order = orderService.updateOrder(orderID, order);
         return ResponseEntity.ok(order);
     }
+
+    @GetMapping("/orders/checkout-success")
+    public ResponseEntity<?> checkOutSuccessfully(@RequestParam("orderID") String orderID, MailRequest request){
+        Order orderExisted = orderRepository.findById(orderID).get();
+        User userFind = userRepository.findById(orderExisted.getUser().getId()).get();
+
+        if(userFind != null){
+            if(orderExisted.getTotalDeposit() > userFind.getVirtualWallet()){
+                return ResponseEntity.ok().body("Your balance in Virtual Wallet is not enough to order!" +
+                        "\nPlease insert more to continue shopping!");
+            }else{
+                orderExisted.setStatus(Order.OrderStatus.COMPLETED);
+                orderRepository.save(orderExisted);
+
+                userFind.setVirtualWallet(userFind.getVirtualWallet() - orderExisted.getTotalDeposit());
+                userRepository.save(userFind);
+
+                request.setFrom("viethoang2001gun@gmail.com");
+                request.setTo(userFind.getEmail());
+                request.setSubject("Hi there!");
+                request.setName(userFind.getName());
+
+                Map<String, Object> model = new HashMap<>();
+                model.put("totalRent", orderExisted.getTotalRent());
+                model.put("totalDeposit", orderExisted.getTotalDeposit());
+                model.put("virtualWallet", userFind.getVirtualWallet());
+                model.put("Name", request.getName());
+                model.put("location", "Hanoi, Vietnam");
+
+                mailService.sendMailCheckoutSuccess(request, model);
+                return ResponseEntity.ok().body("Thank you for using our service!\nWe have sent mail confirm to your email\n" +
+                        "Please check your email to confirm!");
+            }
+        }else{
+            return ResponseEntity.badRequest().body("Cannot find User Email or this order is not existed !");
+        }
+    }
+
 }

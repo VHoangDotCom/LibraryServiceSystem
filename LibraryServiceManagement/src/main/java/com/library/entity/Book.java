@@ -39,7 +39,7 @@ public class Book {
     private Date publishedAt;
 
     @ManyToOne(
-            cascade = CascadeType.REMOVE
+            //cascade = CascadeType.
     )
     @JoinColumn(
             name = "category_id",
