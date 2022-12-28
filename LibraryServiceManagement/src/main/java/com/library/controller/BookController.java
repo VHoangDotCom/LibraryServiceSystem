@@ -38,6 +38,15 @@ public class BookController {
         }
     }
 
+    @GetMapping("/books/category/{cateId}")
+    public ResponseEntity<?> getBookByCateID(@PathVariable Long cateId){
+        if(bookService.getAllBookByCategoryID(cateId) == null){
+            return ResponseEntity.ok().body("List books is empty!");
+        }else{
+            return ResponseEntity.ok().body(bookService.getAllBookByCategoryID(cateId));
+        }
+    }
+
     @PostMapping("/books/add")
     public Book createBook(@RequestParam("categoryId") Long categoryId ,@RequestBody Book book) {
         Category categoryFind = categoryRepository.findById(categoryId).get();

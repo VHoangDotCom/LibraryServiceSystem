@@ -232,6 +232,10 @@
   Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
   ![alt text]()
 
+6. Get List Book by CategoryID
+- http://localhost:8080/api/books/category/1
+- Get
+
 
 ## Order (Thao tác như Category )
 1. Get List Orders - Role Admin
@@ -319,6 +323,9 @@
 - Step 2: Access to email to receive confirmation
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218674/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Checkout_Success1_jqlt5v.png)
 
+9. Export Order data to Excel
+- http://localhost:8080/api/orders/export-to-excel
+- Get
 
 
 ## OrderItem (Thao tác như Order )

@@ -40,6 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/user/username/{username}",
             "/api/user/email/{email}",
 
+
+            "/api/users/export-to-excel",
+            "/api/orders/export-to-excel",
+
             //Category
             "/api/categories",
             "/api/category/{id}",
@@ -47,19 +51,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //Book
             "/api/books",
             "/api/book/{id}",
+            "/api/books/category/{cateId}"
 
-            "/",
-            "/pay/**",
-            "/pay/success/**",
-            "/pay/cancel"
     };
 
     private static final String[] ALLOW_POST_ALL_URLS = {
             "api/user/resetPassword/**",
             "api/user/savePassword/**",
-            "/api/user/save/**",
-            "/pay/**",
-            "/"
+            "/api/user/save/**"
     };
 
     private static final String[] ALLOW_POST_USER_URLS = {
@@ -99,9 +98,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] ALLOW_GET_ADMIN_URLS = {
+            //User
             "/api/users",
             "/api/user/{id}",
-            "/api/users/export-to-excel",
 
             //Order
             "/api/orders",
