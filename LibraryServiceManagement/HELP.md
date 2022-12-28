@@ -239,14 +239,14 @@
 - Get
 - Header : Thêm trường Authorization
     Value : Bearer access_token_khi_login  ( access token phải là của Admin )
-    ![alt text]()
+    ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218667/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_list_order_admin_vvtcxj.png)
 
 2. Get Order by ID - Role Admin
 - http://localhost:8080/api/order/tqrs9id7Y0
 - Get
 - Header : Thêm trường Authorization
     Value : Bearer access_token_khi_login  ( access token phải là của Admin )
-    ![alt text]()
+    ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218667/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Order_by_ID_lnzlbg.png)
 
 
 3. Create new Order by UserID
@@ -254,7 +254,7 @@
 - Post
 - Header : Thêm trường Authorization
   Value : Bearer access_token_khi_login  ( access token phải là của Member tro len; userID phai lay cua member khi da dang nhap vao )
-  ![alt text]()
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218667/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Create_order_by_UserID1_p6ve6j.png)
 
 
 - Body:
@@ -286,14 +286,14 @@
   "totalDeposit": 340000,
   "totalRent": 34000
   }
-  ![alt text]()
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218668/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Update_Order_by_ID_hqmccr.png)
 
 5. Delete Order by ID
 - http://localhost:8080/api/orders/delete/QIJfM2wyBA
 - Delete
 - Header : Thêm trường Authorization
   Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
-  ![alt text]()
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218668/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Delete_Order_by_ID_khjvap.png)
 
 6. Get List Orders by UserID
 - http://localhost:8080/api/orders/user?userId=2
@@ -308,6 +308,16 @@
 - Header : Thêm trường Authorization
   Value : Bearer access_token_khi_login  ( access token phải là của Tài khoản đăng nhập vào )
   ![alt text]()
+
+8. Checkout success (Tài khoản khi submit Checkout thành công)
+- http://localhost:8080/api/orders/checkout-success?orderID=vOWELCFpiw
+- Get
+- Header : Thêm trường Authorization
+   Value : Bearer access_token_khi_login  ( access token phải là của Tài khoản đăng nhập vào )
+   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218674/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Checkout_Success_ajtxmv.png)
+
+- Step 2: Access to email to receive confirmation
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218674/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Checkout_Success1_jqlt5v.png)
 
 
 

@@ -21,5 +21,7 @@ public interface MailService {
 
     MailResponse sendMailWithTemplate(MailRequest request, Map<String, Object> model);
 
+    MailResponse sendMailCheckoutSuccess(MailRequest request, Map<String, Object> model);
+
 }
 

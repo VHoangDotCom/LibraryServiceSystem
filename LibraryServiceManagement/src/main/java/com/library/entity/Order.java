@@ -23,11 +23,22 @@ public class Order {
     private String phoneNumber;
     private String address;
     private OrderStatus status;
+
     private int totalDeposit;
     private int totalRent;
 
     private Date createdAt;
     private Date updatedAt;
+
+    //Paypal get data
+    @Transient
+    private String currency;
+    @Transient
+    private String method;
+    @Transient
+    private String intent;
+    @Transient
+    private String description;
 
     @ManyToOne(
             cascade = CascadeType.REMOVE
