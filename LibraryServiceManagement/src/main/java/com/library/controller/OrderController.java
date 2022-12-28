@@ -108,7 +108,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/checkout-success")
-    public ResponseEntity<?> checkOutSuccessfully(@RequestParam("orderID") String orderID, MailRequest request){
+    public ResponseEntity<?> checkOutSuccessfully(@RequestParam("orderID") String orderID, MailRequest request)throws IOException{
         Order orderExisted = orderRepository.findById(orderID).get();
         User userFind = userRepository.findById(orderExisted.getUser().getId()).get();
 
@@ -142,6 +142,16 @@ public class OrderController {
         }else{
             return ResponseEntity.badRequest().body("Cannot find User Email or this order is not existed !");
         }
+    }
+
+    @GetMapping("/orders/export-to-excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=Users_Information.xlsx";
+
+        response.setHeader(headerKey, headerValue);
+        orderService.exportOrderToExcel(response);
     }
 
 }

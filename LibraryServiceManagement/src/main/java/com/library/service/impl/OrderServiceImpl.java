@@ -6,10 +6,14 @@ import com.library.entity.User;
 import com.library.repository.OrderRepository;
 import com.library.repository.UserRepository;
 import com.library.service.OrderService;
+import com.library.service.export_excel.ExcelExportOrders;
+import com.library.service.export_excel.ExcelExportUsers;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -83,6 +87,14 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(orderExisted);
         return orderExisted;
+    }
+
+    @Override
+    public List<Order> exportOrderToExcel(HttpServletResponse response) throws IOException {
+        List<Order> orders = orderRepository.findAll();
+        ExcelExportOrders exportUtils = new ExcelExportOrders(orders);
+        exportUtils.exportOrderDataToExcel(response);
+        return orders;
     }
 
 }
