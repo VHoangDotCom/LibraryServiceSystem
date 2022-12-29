@@ -57,8 +57,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User saveUser(User user) {
         //Account auto has role 'Member' whenever created
         Role role = roleRepository.findByName("MEMBER");
+        Role role1 = roleRepository.findByName("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
+        roles.add(role1);
         user.setRoles(roles);
         user.setVirtualWallet(50000);
         user.setAvatar("https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg");
