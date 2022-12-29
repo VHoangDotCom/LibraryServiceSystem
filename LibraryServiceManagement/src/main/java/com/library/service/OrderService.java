@@ -13,4 +13,5 @@ public interface OrderService {
     String deleteOrder(String id);
     Order updateOrder(String id, Order order);
     List<Order> exportOrderToExcel(HttpServletResponse response) throws IOException;
+    List<Order> exportSingleOrderToExcel(HttpServletResponse response, List<Order> orderList) throws  IOException;
 }

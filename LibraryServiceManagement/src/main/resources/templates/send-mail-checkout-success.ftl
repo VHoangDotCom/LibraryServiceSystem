@@ -26,10 +26,12 @@
                             <br>Xin chào, ${Name}!  <br>
                             <br> Chúng tôi xin gửi lời cảm ơn chân thành khi bạn đã lựa chọn dịch vụ sản phẩm bên thư viện chúng tôi.<br>
                             <br>Tổng số tiền thuê sách của bạn là ${totalRent} và tổng số tiền cọc của bạn là ${totalDeposit}<br> <br>
-                            <br>Hệ thống sẽ tự động trừ tiền cọc vào Ví ảo của bạn - số dư: ${virtualWallet}. Ví ảo của bạn sẽ được hoàn lại
+                            <br>Hệ thống sẽ tự động trừ tiền cọc vào Ví ảo của bạn ( số dư: ${virtualWallet} ). Ví ảo của bạn sẽ được hoàn lại
                             số tiền cọc khi bạn hoàn trả sách đúng hạn!
+                            <br> Đây là thông tin danh sách các đơn hàng của bạn đã được hệ thống lưu lại:
+                            <a href="${orderDetail}"> Xem tại đây!</a>
                             <br>Thân ái! Xin chân thành cảm ơn - Quyết Chủ tịch
-                            <br> <br> <b>${Name}</b><br>${location}<br>
+                            <br> <br> <b> <del>Trịnh</del> Nguyễn Văn Quyết</b><br>${location}<br>
                             <br>
                         </div>
                     </td>

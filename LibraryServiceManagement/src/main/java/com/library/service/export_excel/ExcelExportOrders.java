@@ -77,6 +77,7 @@ public class ExcelExportOrders {
         createCell(row,6, "Total Rent", style);
         createCell(row,7, "Created At", style);
         createCell(row,8, "Updated At", style);
+        createCell(row,9, "Status", style);
     }
 
     private void writeUserData() {
@@ -98,6 +99,7 @@ public class ExcelExportOrders {
             createCell(row, columnCount++, order.getTotalRent(), style);
             createCell(row, columnCount++, order.getCreatedAt().toString(), style);
             createCell(row, columnCount++, order.getUpdatedAt().toString(), style);
+            createCell(row, columnCount++, order.getStatus().toString(), style);
 
         }
     }
@@ -110,4 +112,5 @@ public class ExcelExportOrders {
         workbook.close();
         outputStream.close();
     }
+
 }

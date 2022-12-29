@@ -108,9 +108,14 @@ public class OrderController {
     }
 
     @GetMapping("/orders/checkout-success")
-    public ResponseEntity<?> checkOutSuccessfully(@RequestParam("orderID") String orderID, MailRequest request)throws IOException{
+    public ResponseEntity<?> checkOutSuccessfully(@RequestParam("orderID") String orderID,
+                                                  MailRequest request,
+                                                  HttpServletResponse response,
+                                                  HttpServletRequest httpServletRequest) throws IOException{
+
         Order orderExisted = orderRepository.findById(orderID).get();
         User userFind = userRepository.findById(orderExisted.getUser().getId()).get();
+        //List<Order> listOrderUserFind = orderService.getListOrderByUserID(userFind.getId());
 
         if(userFind != null){
             if(orderExisted.getTotalDeposit() > userFind.getVirtualWallet()){
@@ -124,20 +129,23 @@ public class OrderController {
                 userRepository.save(userFind);
 
                 request.setFrom("viethoang2001gun@gmail.com");
-                request.setTo(userFind.getEmail());
+                request.setTo(orderExisted.getEmail());
                 request.setSubject("Hi there!");
-                request.setName(userFind.getName());
+                request.setName(orderExisted.getFullName());
 
                 Map<String, Object> model = new HashMap<>();
                 model.put("totalRent", orderExisted.getTotalRent());
                 model.put("totalDeposit", orderExisted.getTotalDeposit());
                 model.put("virtualWallet", userFind.getVirtualWallet());
-                model.put("Name", request.getName());
+                model.put("orderDetail", applicationUrl(httpServletRequest, userFind.getId()));
+                model.put("Name", orderExisted.getFullName());
                 model.put("location", "Hanoi, Vietnam");
 
                 mailService.sendMailCheckoutSuccess(request, model);
+                //exportToExcelAllOrderDataOfSingleAccount(response, listOrderUserFind);
+                //applicationUrl(httpServletRequest, userFind.getId())
                 return ResponseEntity.ok().body("Thank you for using our service!\nWe have sent mail confirm to your email\n" +
-                        "Please check your email to confirm!");
+                        "Please check your email to confirm!\n" );
             }
         }else{
             return ResponseEntity.badRequest().body("Cannot find User Email or this order is not existed !");
@@ -145,13 +153,41 @@ public class OrderController {
     }
 
     @GetMapping("/orders/export-to-excel")
-    public void exportToExcel(HttpServletResponse response) throws IOException {
+    public void exportToExcelAllOrderData(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=Users_Information.xlsx";
-
+        String headerValue = "attachment; filename=Orders_Information.xlsx";
         response.setHeader(headerKey, headerValue);
         orderService.exportOrderToExcel(response);
+    }
+
+    @GetMapping("/orders/export-to-excel-single")
+    public void exportToExcelAllOrderDataOfSingleAccount(@RequestParam("userId") Long userId,
+                                                         HttpServletResponse response) throws IOException{
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=Your_Orders_Information.xlsx";
+        response.setHeader(headerKey, headerValue);
+        List<Order> orderList = orderService.getListOrderByUserID(userId);
+        orderService.exportSingleOrderToExcel(response, orderList);
+    }
+
+    @GetMapping("/orders/export-excel-single")
+    public void exportToExcelAllOrderDataOfSingleAccount(HttpServletResponse response, List<Order> orders) throws IOException{
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=Your_Orders_Information.xlsx";
+        response.setHeader(headerKey, headerValue);
+        orderService.exportSingleOrderToExcel(response, orders);
+    }
+
+    private String applicationUrl(HttpServletRequest request, Long userId) {
+        return "http://" +
+                request.getServerName() +
+                ":" +
+                request.getServerPort() +
+                "/api/orders/export-to-excel-single?userId="+
+               userId;
     }
 
 }

@@ -31,6 +31,7 @@ public class User {
 
     private String avatar;
     private String address;
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
     private int virtualWallet;
 
