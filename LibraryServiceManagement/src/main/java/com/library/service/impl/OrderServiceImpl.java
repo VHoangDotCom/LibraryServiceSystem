@@ -97,4 +97,11 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
 
+    @Override
+    public List<Order> exportSingleOrderToExcel(HttpServletResponse response, List<Order> orderList) throws  IOException{
+        ExcelExportOrders exportUtils = new ExcelExportOrders(orderList);
+        exportUtils.exportOrderDataToExcel(response);
+        return orderList;
+    }
+
 }

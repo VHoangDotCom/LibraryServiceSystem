@@ -323,9 +323,14 @@
 - Step 2: Access to email to receive confirmation
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218674/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Checkout_Success1_jqlt5v.png)
 
-9. Export Order data to Excel
+9. Export Orders data to Excel
 - http://localhost:8080/api/orders/export-to-excel
 - Get
+
+10. Export Account's Order data to Excel
+- http://localhost:8080/api/orders/export-to-excel-single?userId=3
+- Get
+- Chay tren trinh duyet
 
 
 ## OrderItem (Thao tác như Order )
