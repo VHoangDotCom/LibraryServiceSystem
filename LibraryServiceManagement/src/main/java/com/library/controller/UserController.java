@@ -180,7 +180,9 @@ public class UserController {
     }
 
     @PostMapping("/user/resetPassword")
-    public String resetPassword(@RequestBody PasswordModel passwordModel, HttpServletRequest request)
+    public String resetPassword(@RequestBody PasswordModel passwordModel,
+                                HttpServletRequest request,
+                                MailRequest mailRequest)
             throws MessagingException
     {
         User user = userService.findUserByEmail(passwordModel.getEmail());
@@ -189,13 +191,21 @@ public class UserController {
             String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
             url = passwordResetTokenMail(user, applicationUrl(request), token);
-            mailService.sendMailWithoutAttachment(
+           /* mailService.sendMailWithoutAttachment(
                     "" + user.getEmail(),
                     "\tIf you have send Reset Password Request, please enter this link to reset your password: \n "+ url +
                             "\t( This link will be disabled after 10 minutes. )" +
                             "\n\n\tIf you are not the one who had send request to us, please check your Account's Security.",
                     "Hi "  + " from Maleficent System!"
-            );
+            );*/
+            mailRequest.setFrom("viethoang2001gun@gmail.com");
+            mailRequest.setTo(user.getEmail());
+            mailRequest.setSubject("Hello "+user.getEmail());
+            mailRequest.setName(user.getUsername());
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("resetPasswordLink", url);
+           mailService.sendMailRequestedResetPassword(mailRequest,model);
         } else {
             return "User with entered email is not existed!";
         }
@@ -218,6 +228,7 @@ public class UserController {
 
             Map<String, Object> model = new HashMap<>();
             model.put("Name", request.getName());
+            model.put("emailUser", request.getTo());
             model.put("location", "Hanoi, Vietnam");
 
             userService.changePassword(user.get(), passwordModel.getNewPassword());

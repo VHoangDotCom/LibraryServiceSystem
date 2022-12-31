@@ -134,9 +134,11 @@ public class OrderController {
                 request.setName(orderExisted.getFullName());
 
                 Map<String, Object> model = new HashMap<>();
+                model.put("SKU", orderExisted.getOrderId());
                 model.put("totalRent", orderExisted.getTotalRent());
                 model.put("totalDeposit", orderExisted.getTotalDeposit());
                 model.put("virtualWallet", userFind.getVirtualWallet());
+                model.put("orderDate", orderExisted.getCreatedAt());
                 model.put("orderDetail", applicationUrl(httpServletRequest, userFind.getId()));
                 model.put("Name", orderExisted.getFullName());
                 model.put("location", "Hanoi, Vietnam");
