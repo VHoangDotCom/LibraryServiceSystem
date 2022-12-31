@@ -20,6 +20,7 @@ public interface MailService {
             throws MessagingException;
 
     MailResponse sendMailWithTemplate(MailRequest request, Map<String, Object> model);
+    MailResponse sendMailRequestedResetPassword(MailRequest request, Map<String, Object> model);
 
     MailResponse sendMailCheckoutSuccess(MailRequest request, Map<String, Object> model);
 
