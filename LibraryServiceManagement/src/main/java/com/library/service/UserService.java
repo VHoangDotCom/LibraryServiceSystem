@@ -20,6 +20,8 @@ public interface UserService {
     User findUserByEmail(String email);
 
     List<User> getUsers();
+    User updateUserByID(Long id, User user);
+    User updateUserByLoggedIn( User user);
 
     //Password Reset
     void createPasswordResetTokenForUser(User user, String token);

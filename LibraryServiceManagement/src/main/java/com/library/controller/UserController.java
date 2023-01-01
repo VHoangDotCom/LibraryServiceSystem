@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.library.entity.Order;
 import com.library.entity.Role;
 import com.library.entity.User;
 import com.library.entity.email.MailRequest;
@@ -237,6 +238,58 @@ public class UserController {
         } else {
             return "Invalid Token";
         }
+    }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<?> updateUserByAdmin(@RequestParam("userId") Long userId ,
+                                             @RequestBody User user) {
+        User userExisted = userRepository.findById(userId).get();
+        if(userExisted != null){
+            userExisted = userService.updateUserByID(userId, user);
+            return ResponseEntity.ok(userExisted);
+        }else{
+            return ResponseEntity.badRequest().body("Cannot find User with Id " + userId);
+        }
+    }
+
+    @PutMapping("/user/update-profile")
+    public ResponseEntity<?> updateProfile(HttpServletRequest request,
+                                           HttpServletResponse response,
+                                           @RequestBody User userRequest) throws IOException {
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            try {
+                String refresh_token = authorizationHeader.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(refresh_token);
+                String username = decodedJWT.getSubject();
+                User user = userService.getUser(username);
+
+                if(user != null){
+                    user.setName(userRequest.getName());
+                    user.setUsername(userRequest.getUsername());
+                    user.setAvatar(userRequest.getAvatar());
+                    user.setAddress(userRequest.getAddress());
+                    user.setStatus(userRequest.getStatus());
+                    user.setVirtualWallet(userRequest.getVirtualWallet());
+                    userRepository.save(user);
+                   return ResponseEntity.ok(user);
+                }else{
+                    return ResponseEntity.badRequest().body("Cannot find User with name " + username);
+                }
+            } catch (Exception exception) {
+                response.setHeader("error", exception.getMessage());
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                Map<String, String> error = new HashMap<>();
+                error.put("access_message", exception.getMessage());
+                response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
+            }
+        } else {
+            return  ResponseEntity.ok().body(new RuntimeException("Access token is missing !"));
+        }
+        return ResponseEntity.ok().body("");
     }
 
     private String passwordResetTokenMail(User user, String applicationUrl, String token) {
