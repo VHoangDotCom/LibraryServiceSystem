@@ -1,5 +1,6 @@
 package com.library.service.impl;
 
+import com.library.entity.Category;
 import com.library.entity.Role;
 import com.library.entity.User;
 import com.library.entity.token.PasswordResetToken;
@@ -128,6 +129,33 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         PasswordResetToken passwordResetToken
                 = new PasswordResetToken(user, token);
         passwordResetTokenRepository.save(passwordResetToken);
+    }
+
+    @Override
+    public User updateUserByID(Long id, User user) {
+        User userExisted = userRepo.findById(id).get();
+        userExisted.setName(user.getName());
+        userExisted.setUsername(user.getUsername());
+        userExisted.setAvatar(user.getAvatar());
+        userExisted.setAddress(user.getAddress());
+        userExisted.setStatus(user.getStatus());
+        userExisted.setVirtualWallet(user.getVirtualWallet());
+
+        userRepo.save(userExisted);
+        return userExisted;
+    }
+
+    @Override
+    public User updateUserByLoggedIn( User user) {
+        user.setName(user.getName());
+        user.setUsername(user.getUsername());
+        user.setAvatar(user.getAvatar());
+        user.setAddress(user.getAddress());
+        user.setStatus(user.getStatus());
+        user.setVirtualWallet(user.getVirtualWallet());
+
+        userRepo.save(user);
+        return user;
     }
 
     @Override

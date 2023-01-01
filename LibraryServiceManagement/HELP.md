@@ -123,6 +123,42 @@
   Value : Bearer access_token_khi_login  ( access token là của User đăng nhập )
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1671548012/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_User_Profile_nfpew7.png)
 
+8. Update User Detail by ID ( Admin role )
+- http://localhost:8080/api/user/update?userId=1
+- Put
+- Body:
+  {
+  "name": "Dat Villa",
+  "username": "vinacon",
+  "avatar": "1.jpg",
+  "email":"vina@gmail.com",
+  "address":"Day xa hoi",
+  "status": "CANCELED",
+  "virtualWallet": 70000
+  }
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672591722/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Update_Profile_by_Admin_djndbr.png)
+
+9. Update User Profile by access_token ( Logged In account role )
+- http://localhost:8080/api/user/update-profile
+- Put
+- Body:
+  {
+  "name": "Dat Villa",
+  "username": "vinacon",
+  "avatar": "1.jpg",
+  "email":"vina@gmail.com",
+  "address":"Day xa hoi",
+  "status": "CANCELED",
+  "virtualWallet": 70000
+  }
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token là của User đăng nhập )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672591722/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Update_Profile_by_Logged_In_falgqk.png)
+
+
+
 
 ## Category
 1. Create new Category

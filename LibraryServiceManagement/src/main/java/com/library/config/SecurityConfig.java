@@ -97,7 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/orders/save/{id}/**",
             "/api/orders/save/**",
             "/api/order_items/save/**",
-
+            "/api/user/update-profile/**",
     };
 
     private static final String[] ALLOW_GET_ADMIN_URLS = {
@@ -133,6 +133,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/categories/save/{id}/**",
             "/api/orders/save/**",
             "/api/order_items/save/**",
+            "/api/user/update/**"
     };
 
     private static final String[] ALLOW_DELETE_ADMIN_URLS = {
