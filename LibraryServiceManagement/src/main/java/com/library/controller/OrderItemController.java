@@ -80,6 +80,32 @@ public class OrderItemController {
         }
     }
 
+    @PostMapping("/order_items/add-buy")
+    public ResponseEntity<?> createOrderItemWhenBuying(@RequestParam("orderId") String orderId ,
+                                             @RequestParam("bookId") Long bookId,
+                                             @RequestBody OrderItem orderItem) {
+
+        Order orderFind = orderRepository.findById(orderId).get();
+        orderItem.setOrder(orderFind);
+        Book bookFind = bookRepository.findById(bookId).get();
+        orderItem.setBook(bookFind);
+
+        if(orderItem.getQuantity() >= bookFind.getAmount()){
+            return ResponseEntity.ok().body("Store doesn't have enough books! Please decrease your amount of Book!");
+        }else{
+            //Update lại số lượng sách tồn kho
+            bookFind.setAmount(bookFind.getAmount() - orderItem.getQuantity());
+            bookRepository.save(bookFind);
+
+            //Update tổng tiền cọc - depositTotal (la so tien phai thanh toan ) trong Order
+            orderFind.setTotalDeposit(orderFind.getTotalDeposit() + orderItem.getQuantity()*bookFind.getPrice());
+            orderRepository.save(orderFind);
+
+            System.out.println(orderItem);
+            return ResponseEntity.ok().body(orderItemService.createOrderItem(orderItem));
+        }
+    }
+
     @DeleteMapping("/order_items/delete/{id}")
     public ResponseEntity<?> deleteOrderItem(@PathVariable Long id) {
         OrderItem orderItemExisted = orderItemRepository.findById(id).get();
@@ -104,6 +130,22 @@ public class OrderItemController {
         //Update tổng tiền cọc - depositTotal và tổng tiền thuê - rentTotal trong Order
         orderFind.setTotalDeposit(orderFind.getTotalDeposit() - orderItemExisted.getQuantity()*bookFind.getPrice());
         orderFind.setTotalRent(orderFind.getTotalRent() - orderItemExisted.getQuantity()*bookFind.getBorrowPrice()*(day_range));
+        orderRepository.save(orderFind);
+        return ResponseEntity.ok(orderItemService.deleteOrderItem(id));
+    }
+
+    @DeleteMapping("/order_items/delete-buy/{id}")
+    public ResponseEntity<?> deleteOrderItemWhenBuying(@PathVariable Long id) {
+        OrderItem orderItemExisted = orderItemRepository.findById(id).get();
+        Book bookFind = bookRepository.findById(orderItemExisted.getBook().getId()).get();
+        Order orderFind = orderRepository.findById(orderItemExisted.getOrder().getOrderId()).get();
+
+        //Update lại số lượng sách tồn kho
+        bookFind.setAmount(bookFind.getAmount() + orderItemExisted.getQuantity());
+        bookRepository.save(bookFind);
+
+        //Update tổng tiền cọc - depositTotal và tổng tiền thuê - rentTotal trong Order
+        orderFind.setTotalDeposit(orderFind.getTotalDeposit() - orderItemExisted.getQuantity()*bookFind.getPrice());
         orderRepository.save(orderFind);
         return ResponseEntity.ok(orderItemService.deleteOrderItem(id));
     }
@@ -161,4 +203,38 @@ public class OrderItemController {
        /* orderItem = orderItemService.updateOrderItem(order_itemID, orderItem);
         return ResponseEntity.ok(orderItem);*/
     }
+
+    @PutMapping("/order_items/save-buy")
+    public ResponseEntity<?> updateOrderItemWhenBuying(@RequestParam("order_itemID") Long order_itemID ,
+                                             @RequestBody OrderItem orderItem) {
+        OrderItem orderItemExisted = orderItemRepository.findById(order_itemID).get();
+        Book bookFind = bookRepository.findById(orderItemExisted.getBook().getId()).get();
+        Order orderFind = orderRepository.findById(orderItemExisted.getOrder().getOrderId()).get();
+
+        if(orderItem.getQuantity() <= orderItemExisted.getQuantity()){
+            //Trường hợp số sách mua update <= số sách mua trước đó
+            bookFind.setAmount(bookFind.getAmount() + (orderItemExisted.getQuantity() - orderItem.getQuantity()) );
+            bookRepository.save(bookFind);
+            //Update tổng tiền cọc - depositTotal và tổng tiền thuê - rentTotal trong Order
+            orderFind.setTotalDeposit(orderFind.getTotalDeposit() - (orderItemExisted.getQuantity() - orderItem.getQuantity())*bookFind.getPrice());
+            orderRepository.save(orderFind);
+            return ResponseEntity.ok().body(orderItemService.updateOrderItem(order_itemID,orderItem));
+        }else {
+            //Trường hợp số sách mua update > số sách mua trước đó
+            if( (orderItem.getQuantity() - orderItemExisted.getQuantity()) >= bookFind.getAmount()){
+                //Số sách mua thêm vượt quá lượng sách tồn kho
+                return ResponseEntity.ok().body("Store doesn't have enough book! Please decrease your amount of Books!");
+            }else{
+                //Số sách mua thêm vừa đủ cho lượng sách tồn kho
+                bookFind.setAmount(bookFind.getAmount() - (orderItem.getQuantity() - orderItemExisted.getQuantity()));
+                bookRepository.save(bookFind);
+                //Update tổng tiền cọc - depositTotal ( la tong tien thanh toan ) trong Order
+                orderFind.setTotalDeposit(orderFind.getTotalDeposit() + (orderItem.getQuantity() - orderItemExisted.getQuantity())*bookFind.getPrice());
+                orderRepository.save(orderFind);
+                return ResponseEntity.ok().body(orderItemService.updateOrderItem(order_itemID,orderItem));
+            }
+        }
+    }
+
+
 }

@@ -41,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalDeposit(0);
 
         order.setStatus(Order.OrderStatus.PENDING);
+        order.setType(Order.OrderType.VIRTUAL_WALLET);
 
         return orderRepository.save(order);
     }
@@ -80,6 +81,7 @@ public class OrderServiceImpl implements OrderService {
         orderExisted.setPhoneNumber(order.getPhoneNumber());
         orderExisted.setAddress(order.getAddress());
         orderExisted.setStatus(order.getStatus());
+        orderExisted.setType(order.getType());
        /* orderExisted.setTotalDeposit(order.getTotalDeposit());
         orderExisted.setTotalRent(order.getTotalRent());*/
 

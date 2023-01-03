@@ -24,5 +24,7 @@ public interface MailService {
 
     MailResponse sendMailCheckoutSuccess(MailRequest request, Map<String, Object> model);
 
+    MailResponse sendMailCheckoutWhenBuyingSuccess(MailRequest request, Map<String, Object> model);
+
 }
 

@@ -78,25 +78,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/user/profile",
             "/api/orders/user-account",
             "/api/order_items/order/**",
-            "/api/orders/checkout-success/**"
+            "/api/orders/checkout-success/**",
+            "/api/orders/checkout-buying-success/**"
     };
 
     private static final String[] ALLOW_POST_MEMBER_URLS = {
             "/api/user/changePassword",
             "/api/orders/add/**",
-            "/api/order_items/add/**"
+            "/api/order_items/add/**",
+            "/api/order_items/add-buy/**"
 
     };
 
     private static final String[] ALLOW_DELETE_MEMBER_URLS = {
             "/api/orders/delete/{id}/**",
-            "/api/order_items/delete/{id}/**"
+            "/api/order_items/delete/{id}/**",
+            "/api/order_items/delete-buy/{id}/**"
     };
 
     private static final String[] ALLOW_PUT_MEMBER_URLS = {
             "/api/orders/save/{id}/**",
             "/api/orders/save/**",
+
             "/api/order_items/save/**",
+            "/api/order_items/save-buy/**",
+
             "/api/user/update-profile/**",
     };
 
