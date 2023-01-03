@@ -118,15 +118,120 @@ public class OrderController {
         //List<Order> listOrderUserFind = orderService.getListOrderByUserID(userFind.getId());
 
         if(userFind != null){
-            if(orderExisted.getTotalDeposit() > userFind.getVirtualWallet()){
-                return ResponseEntity.ok().body("Your balance in Virtual Wallet is not enough to order!" +
-                        "\nPlease insert more to continue shopping!");
+            if(orderExisted.getType() == Order.OrderType.DIRECTLY || orderExisted.getType() == Order.OrderType.PAYPAL){
+                if(orderExisted.getTotalDeposit() > userFind.getVirtualWallet()){
+                    return ResponseEntity.ok().body("Your balance in Virtual Wallet is not enough to order!" +
+                            "\nPlease insert more to continue shopping!");
+                }else{
+                    orderExisted.setStatus(Order.OrderStatus.AVAILABLE);
+                    orderRepository.save(orderExisted);
+
+                    userFind.setVirtualWallet(userFind.getVirtualWallet() - orderExisted.getTotalDeposit());
+                    userRepository.save(userFind);
+
+                    request.setFrom("viethoang2001gun@gmail.com");
+                    request.setTo(orderExisted.getEmail());
+                    request.setSubject("Hi there!");
+                    request.setName(orderExisted.getFullName());
+
+                    Map<String, Object> model = new HashMap<>();
+                    model.put("SKU", orderExisted.getOrderId());
+                    model.put("totalRent", orderExisted.getTotalRent());
+                    model.put("totalDeposit", orderExisted.getTotalDeposit());
+                    model.put("orderType",orderExisted.getType());
+                    model.put("virtualWallet", userFind.getVirtualWallet());
+                    model.put("orderDate", orderExisted.getCreatedAt());
+                    model.put("orderDetail", applicationUrl(httpServletRequest, userFind.getId()));
+                    model.put("Name", orderExisted.getFullName());
+                    model.put("location", "Hanoi, Vietnam");
+
+                    mailService.sendMailCheckoutSuccess(request, model);
+                    //exportToExcelAllOrderDataOfSingleAccount(response, listOrderUserFind);
+                    //applicationUrl(httpServletRequest, userFind.getId())
+                    return ResponseEntity.ok().body("Thank you for using our service!\nWe have sent mail confirm to your email\n" +
+                            "Please check your email to confirm!\n" );
+                }
+            }
+            else if (orderExisted.getType() == Order.OrderType.VIRTUAL_WALLET){
+                if(orderExisted.getTotalDeposit() + orderExisted.getTotalRent() > userFind.getVirtualWallet()){
+                    return ResponseEntity.ok().body("Your balance in Virtual Wallet is not enough to order!" +
+                            "\nPlease insert more to continue shopping!");
+                }else{
+                    orderExisted.setStatus(Order.OrderStatus.AVAILABLE);
+                    orderRepository.save(orderExisted);
+
+                    userFind.setVirtualWallet(userFind.getVirtualWallet() - ( orderExisted.getTotalDeposit() + orderExisted.getTotalRent() ));
+                    userRepository.save(userFind);
+
+                    request.setFrom("viethoang2001gun@gmail.com");
+                    request.setTo(orderExisted.getEmail());
+                    request.setSubject("Hi there!");
+                    request.setName(orderExisted.getFullName());
+
+                    Map<String, Object> model = new HashMap<>();
+                    model.put("SKU", orderExisted.getOrderId());
+                    model.put("totalRent", orderExisted.getTotalRent());
+                    model.put("totalDeposit", orderExisted.getTotalDeposit());
+                    model.put("orderType",orderExisted.getType());
+                    model.put("virtualWallet", userFind.getVirtualWallet());
+                    model.put("orderDate", orderExisted.getCreatedAt());
+                    model.put("orderDetail", applicationUrl(httpServletRequest, userFind.getId()));
+                    model.put("Name", orderExisted.getFullName());
+                    model.put("location", "Hanoi, Vietnam");
+
+                    mailService.sendMailCheckoutSuccess(request, model);
+                    return ResponseEntity.ok().body("Thank you for using our service!\nWe have sent mail confirm to your email\n" +
+                            "Please check your email to confirm!\n" );
+                }
+            }
+        }else{
+            return ResponseEntity.badRequest().body("Cannot find User Email or this order is not existed !");
+        }
+        return ResponseEntity.ok().body("");
+    }
+
+    @GetMapping("/orders/checkout-buying-success")
+    public ResponseEntity<?> checkOutWhenBuyingSuccessfully(@RequestParam("orderID") String orderID,
+                                                  MailRequest request,
+                                                  HttpServletRequest httpServletRequest) throws IOException{
+
+        Order orderExisted = orderRepository.findById(orderID).get();
+        User userFind = userRepository.findById(orderExisted.getUser().getId()).get();
+
+        if(userFind != null){
+            if(orderExisted.getType() == Order.OrderType.VIRTUAL_WALLET){
+                if(orderExisted.getTotalDeposit() > userFind.getVirtualWallet()){
+                    return ResponseEntity.ok().body("Your balance in Virtual Wallet is not enough to order!" +
+                            "\nPlease insert more to continue shopping!");
+                }else{
+                    orderExisted.setStatus(Order.OrderStatus.COMPLETED);
+                    orderRepository.save(orderExisted);
+
+                    userFind.setVirtualWallet(userFind.getVirtualWallet() - orderExisted.getTotalDeposit());
+                    userRepository.save(userFind);
+
+                    request.setFrom("viethoang2001gun@gmail.com");
+                    request.setTo(orderExisted.getEmail());
+                    request.setSubject("Hi there!");
+                    request.setName(orderExisted.getFullName());
+
+                    Map<String, Object> model = new HashMap<>();
+                    model.put("SKU", orderExisted.getOrderId());
+                    model.put("totalDeposit", orderExisted.getTotalDeposit());
+                    model.put("virtualWallet", userFind.getVirtualWallet());
+                    model.put("orderType",orderExisted.getType());
+                    model.put("orderDate", orderExisted.getCreatedAt());
+                    model.put("orderDetail", applicationUrl(httpServletRequest, userFind.getId()));
+                    model.put("Name", orderExisted.getFullName());
+                    model.put("location", "Hanoi, Vietnam");
+
+                    mailService.sendMailCheckoutWhenBuyingSuccess(request, model);
+                    return ResponseEntity.ok().body("Thank you for using our service!\nWe have sent mail confirm to your email\n" +
+                            "Please check your email to confirm!\n" );
+                }
             }else{
                 orderExisted.setStatus(Order.OrderStatus.COMPLETED);
                 orderRepository.save(orderExisted);
-
-                userFind.setVirtualWallet(userFind.getVirtualWallet() - orderExisted.getTotalDeposit());
-                userRepository.save(userFind);
 
                 request.setFrom("viethoang2001gun@gmail.com");
                 request.setTo(orderExisted.getEmail());
@@ -135,17 +240,15 @@ public class OrderController {
 
                 Map<String, Object> model = new HashMap<>();
                 model.put("SKU", orderExisted.getOrderId());
-                model.put("totalRent", orderExisted.getTotalRent());
                 model.put("totalDeposit", orderExisted.getTotalDeposit());
                 model.put("virtualWallet", userFind.getVirtualWallet());
+                model.put("orderType",orderExisted.getType());
                 model.put("orderDate", orderExisted.getCreatedAt());
                 model.put("orderDetail", applicationUrl(httpServletRequest, userFind.getId()));
                 model.put("Name", orderExisted.getFullName());
                 model.put("location", "Hanoi, Vietnam");
 
-                mailService.sendMailCheckoutSuccess(request, model);
-                //exportToExcelAllOrderDataOfSingleAccount(response, listOrderUserFind);
-                //applicationUrl(httpServletRequest, userFind.getId())
+                mailService.sendMailCheckoutWhenBuyingSuccess(request, model);
                 return ResponseEntity.ok().body("Thank you for using our service!\nWe have sent mail confirm to your email\n" +
                         "Please check your email to confirm!\n" );
             }

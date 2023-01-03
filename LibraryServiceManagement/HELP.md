@@ -296,7 +296,6 @@
   Value : Bearer access_token_khi_login  ( access token phải là của Member tro len; userID phai lay cua member khi da dang nhap vao )
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218667/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Create_order_by_UserID1_p6ve6j.png)
 
-
 - Body:
   {
   "fullName": "Viet Hoang",
@@ -315,7 +314,7 @@
   Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
   ![alt text]()
 
-- Body:
+- Body: ( chú ý update phương thức thanh toán theo lựa chọn Khách hàng )
   {
   "orderId": "eqVzjzIO1k",
   "fullName": "Viet Hoang-sama",
@@ -323,6 +322,7 @@
   "phoneNumber": "05343434",
   "address": "23 Hanoi",
   "status": "PROCESSING",
+  "type":"PAYPAL",
   "totalDeposit": 340000,
   "totalRent": 34000
   }
@@ -367,6 +367,18 @@
 - http://localhost:8080/api/orders/export-to-excel-single?userId=3
 - Get
 - Chay tren trinh duyet
+
+(*Note: Order trong luồng mua CRUD và xử lý tương tự Order luồng thuê. Chỉ khác trường totalBorrow - Order luồng mua ko dùng đến.)
+
+11. Checkout when Buying success (Tài khoản khi submit Checkout mua hàng thành công)
+- http://localhost:8080/api/orders/checkout-buying-success?orderID=64me98LAil
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Tài khoản đăng nhập vào )
+  ![alt text]()
+
+- Step 2: Access to email to receive confirmation
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218674/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Checkout_Success1_jqlt5v.png)
 
 
 ## OrderItem (Thao tác như Order )
@@ -426,3 +438,41 @@
 - Header : Thêm trường Authorization
   Value : Bearer access_token_khi_login  ( access token phải là của Member tro len )
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672125709/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_All_OrderItem_by_Account_s_Order_th2cfd.png)
+
+6. Create new Order Item when Buying ( theo OrderId và BookID ) - tương tự Create OrderItem (khác: bỏ trương BorrowAt + ReturnAt)
+- Lưu ý: Cách thực thi ko khác Tạo mới OrderItem khi thuê, tuy nhiên hàm thực thi phía server sẽ khác, nên lưu ý trường hợp khi dùng API này
+- http://localhost:8080/api/order_items/add-buy?orderId=64me98LAil&bookId=1
+- Post
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Member tro len; userID phai lay cua member khi da dang nhap vao )
+  ![alt text]()
+
+- Body:
+  {
+  "quantity": 3
+  }
+  ![alt text]()
+
+7. Update Order Item by ID - when Buying (Quyền Admin Update - chỉ nên update trường status hay các trường ko ảnh hưởng thông tin Khách hàng)
+- Lưu ý: Cách thực thi ko khác Cập nhật OrderItem khi thuê, tuy nhiên hàm thực thi phía server sẽ khác, nên lưu ý trường hợp khi dùng API này
+- Đọc thêm phần comment hàm OrderItemController/updateOrderItem() để hiểu rõ luồng nghiệp vụ
+- http://localhost:8080/api/order_items/save-buy?order_itemID=1
+- Put
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+  ![alt text]()
+
+- Body:
+  {
+  "quantity": 55
+  }
+  ![alt text]()
+
+
+8. Delete Order Item by ID - when Buying ( Member Logged In role )
+- Lưu ý: Cách thực thi ko khác Xóa OrderItem khi thuê, tuy nhiên hàm thực thi phía server sẽ khác, nên lưu ý trường hợp khi dùng API này
+- http://localhost:8080/api/order_items/delete-buy/1
+- Delete
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+  ![alt text]()

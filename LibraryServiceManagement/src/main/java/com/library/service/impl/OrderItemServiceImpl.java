@@ -1,24 +1,19 @@
 package com.library.service.impl;
 
-import com.library.entity.Book;
-import com.library.entity.Order;
 import com.library.entity.OrderItem;
-import com.library.repository.BookRepository;
 import com.library.repository.OrderItemRepository;
+import com.library.repository.OrderRepository;
 import com.library.service.OrderItemService;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.utility.RandomString;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.List;
 
 @Service
 @Slf4j
 public class OrderItemServiceImpl implements OrderItemService {
     private OrderItemRepository orderItemRepository;
-    private BookRepository bookRepository;
+    private OrderRepository orderRepository;
 
     public OrderItemServiceImpl(OrderItemRepository orderItemRepository) {
         this.orderItemRepository = orderItemRepository;
@@ -61,4 +56,13 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItemRepository.save(orderItemExisted);
         return orderItemExisted;
     }
+
+    @Override
+    public OrderItem updateOrderItemWhenBuying(Long id, OrderItem orderItem) {
+        OrderItem orderItemExisted = orderItemRepository.findById(id).get();
+        orderItemExisted.setQuantity(orderItem.getQuantity());
+        orderItemRepository.save(orderItemExisted);
+        return orderItemExisted;
+    }
+
 }

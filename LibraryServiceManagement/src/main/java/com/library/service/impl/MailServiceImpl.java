@@ -168,6 +168,34 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    public MailResponse sendMailCheckoutWhenBuyingSuccess(MailRequest request, Map<String, Object> model) {
+        MailResponse response = new MailResponse();
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            // set mediaType
+            MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
+
+            Template t = config.getTemplate("send-mail-checkout-buy-success.ftl");
+            String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+
+            helper.setTo(request.getTo());
+            helper.setText(html, true);
+            helper.setSubject(request.getSubject());
+            helper.setFrom(request.getFrom());
+            mailSender.send(message);
+
+            response.setMessage("mail send to : " + request.getTo());
+            response.setStatus(Boolean.TRUE);
+
+        } catch (MessagingException | IOException | TemplateException e) {
+            response.setMessage("Mail Sending failure : "+e.getMessage());
+            response.setStatus(Boolean.FALSE);
+        }
+        return response;
+    }
+
+    @Override
     public MailResponse sendMailRequestedResetPassword(MailRequest request, Map<String, Object> model) {
         MailResponse response = new MailResponse();
         MimeMessage message = mailSender.createMimeMessage();

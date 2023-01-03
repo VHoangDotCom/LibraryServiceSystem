@@ -22,8 +22,13 @@ public class Order {
     private String email;
     private String phoneNumber;
     private String address;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
+
 
     private int totalDeposit;
     private int totalRent;
@@ -58,5 +63,11 @@ public class Order {
         CANCELED,
         REFUND,
         COMPLAINT
+    }
+
+    public enum OrderType{
+        PAYPAL,
+        VIRTUAL_WALLET,
+        DIRECTLY
     }
 }
