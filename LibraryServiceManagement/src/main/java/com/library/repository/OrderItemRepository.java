@@ -12,4 +12,10 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
             nativeQuery = true
     )
     List<OrderItem> getAllOrderItemByOrderID(String orderId);
+
+    @Query(
+            value = "SELECT * FROM order_item s where DAY(s.returned_at) - DAY(CURDATE()) = 1",
+            nativeQuery = true
+    )
+    List<OrderItem> getAllOrderItemRunningOutOfDate();
 }

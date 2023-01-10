@@ -1,7 +1,9 @@
 package com.library.service.impl;
 
+import com.library.entity.User;
 import com.library.entity.email.MailRequest;
 import com.library.entity.email.MailResponse;
+import com.library.repository.UserRepository;
 import com.library.service.MailService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -15,6 +17,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -24,6 +27,8 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -39,6 +44,8 @@ public class MailServiceImpl implements MailService {
     @Autowired
     private Configuration config;
 
+    private final UserRepository userRepository;
+
     @Override
     public void sendSimpleEmail(String toEmail, String body, String subject) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -53,10 +60,33 @@ public class MailServiceImpl implements MailService {
     }
 
     private static String[] Bcc_Mail = {
-            "hoangnvth2010033@fpt.edu.vn",
-            "duongbv.fpt@gmail.com",
-            "anhhvth2010043@fpt.edu.vn"
+          /*  "hoangnvth2010033@fpt.edu.vn",
+            "viethoang2001gun@gmail.com",
+            "anhhvth2010043@fpt.edu.vn"*/
     };
+
+   /* @Scheduled(cron = " 0 0/1 * * * *")//every 1 minute
+    public void  triggerEveryMinute() throws MessagingException {
+        //Working normally
+        List<String> Bcc_mail = new ArrayList<String>();
+        List<User> userList = userRepository.findAll();
+        for(User user :userList){
+            Bcc_mail.add(user.getEmail());
+        }
+
+        Bcc_Mail = Bcc_mail.toArray(new String[0]);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setFrom("viethoang2001gun@gmail.com");
+        message.setTo("viethoang2001gun@gmail.com");
+        message.setText("Hi there");
+        message.setSubject("Xin chao");
+        message.setBcc(Bcc_Mail);//send multiple mail with hide their identity
+
+        mailSender.send(message);
+        log.info("Every minute!!");
+    }*/
 
     @Override
     public void sendMultipleMail(String toEmail, String body, String subject) throws MessagingException {

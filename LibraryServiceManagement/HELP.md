@@ -476,3 +476,54 @@
 - Header : Thêm trường Authorization
   Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
   ![alt text]()
+
+
+
+## Notification (Thao tác như Book )
+1. Get List Notifications
+- http://localhost:8080/api/notifications
+- Get
+- ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673333531/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_All_Notifications_iocqrg.png)
+
+2. Get Notification by ID
+- http://localhost:8080/api/notification/1
+- Get
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673333531/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Notification_by_ID_lijybf.png)
+
+3. Create new Notification by UserID
+- http://localhost:8080/api/notifications/add?userId=1
+- Post
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+- Body:
+  {
+  "content": " Qua han tra sach hehe"
+  }
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673333531/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Add_Notification_by_UserID_chzosx.png)
+
+4. Update Notification by ID 
+- http://localhost:8080/api/notifications/save/1
+- Put
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+- Body:
+  {
+  "content": " Qua han tra sach hehe"
+  }
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673333531/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Update_Notification_by_ID_b7mcap.png)
+
+5. Delete Notification by ID
+- http://localhost:8080/api/notifications/delete/2
+- Delete
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673333531/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Delete_Notification_by_ID_rrezua.png)
+
+6. Get List Notification by UserID
+- http://localhost:8080/api/notifications/user/1
+- Get
+- Header : Thêm trường Authorization
+    Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+    ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673333531/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Notifications_List_by_UserID_dhc9vy.png)

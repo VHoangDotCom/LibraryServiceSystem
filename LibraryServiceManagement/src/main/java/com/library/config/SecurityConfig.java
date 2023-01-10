@@ -40,7 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/user/username/{username}",
             "/api/user/email/{email}",
 
-
             "/api/users/export-to-excel",
             "/api/orders/export-to-excel",
 
@@ -54,7 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/books/category/{cateId}",
 
             //Order
-            "/api/orders/export-to-excel-single"
+            "/api/orders/export-to-excel-single",
+
+            //Notification
+            "/api/notifications",
+            "/api/notification/{id}",
 
     };
 
@@ -79,7 +82,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/orders/user-account",
             "/api/order_items/order/**",
             "/api/orders/checkout-success/**",
-            "/api/orders/checkout-buying-success/**"
+            "/api/orders/checkout-buying-success/**",
+            "/api/notifications/user/{userId}"
     };
 
     private static final String[] ALLOW_POST_MEMBER_URLS = {
@@ -118,7 +122,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             //Order Item
             "/api/order_items",
-            "/api/order_items/order/**"
+            "/api/order_items/order/**",
+
+            //Notification
+            "/api/notifications/user/{userId}"
     };
 
     private static final String[] ALLOW_POST_ADMIN_URLS = {
@@ -132,6 +139,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //Book
             "/api/books/add/**",
             "/api/orders/add/**",
+
+            //Notification
+            "/api/notifications/add/**"
     };
 
     private static final String[] ALLOW_PUT_ADMIN_URLS = {
@@ -139,12 +149,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/categories/save/{id}/**",
             "/api/orders/save/**",
             "/api/order_items/save/**",
-            "/api/user/update/**"
+            "/api/user/update/**",
+            "/api/notifications/save/{id}/**"
     };
 
     private static final String[] ALLOW_DELETE_ADMIN_URLS = {
             "/api/books/delete/{id}/**",
-            "/api/categories/delete/{id}/**"
+            "/api/categories/delete/{id}/**",
+            "/api/notifications/delete/{id}/**"
     };
 
     @Override
