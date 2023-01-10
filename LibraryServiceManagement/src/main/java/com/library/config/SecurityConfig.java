@@ -90,7 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/user/changePassword",
             "/api/orders/add/**",
             "/api/order_items/add/**",
-            "/api/order_items/add-buy/**"
+            "/api/order_items/add-buy/**",
+            "/api/order_items/return"
 
     };
 
@@ -114,6 +115,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //User
             "/api/users",
             "/api/user/{id}",
+            "/api/user/profile",
 
             //Order
             "/api/orders",

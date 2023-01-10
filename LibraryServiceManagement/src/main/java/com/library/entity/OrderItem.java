@@ -25,6 +25,10 @@ public class OrderItem {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date returnedAt;
 
+    @Enumerated(EnumType.STRING)
+    private OrderItemStatus status;
+
+
     @ManyToOne(
             //cascade = CascadeType.REMOVE
     )
@@ -35,11 +39,22 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne(
-            //cascade = CascadeType.REMOVE
+            //cascade = CascadeType.
     )
     @JoinColumn(
             name = "book_id",
             referencedColumnName = "id"
     )
     private Book book;
+
+    public enum OrderItemStatus{
+        PENDING, //Dang trong gio hang
+        BORROWING,//user is borrowing this book
+        RETURN_OVERDUE_DATE,// qua han tra sach
+        OVERDUE_LIMITED_DATE,// qua han cho phep muon ( qua 30 ngay )
+        TORN_OR_LOST, //Rach hoac mat sach
+        RETURN_OK, //Tra sach dung han
+
+        BUY_SUCCESS
+    }
 }

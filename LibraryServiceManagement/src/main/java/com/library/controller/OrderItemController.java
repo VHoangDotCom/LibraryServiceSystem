@@ -1,12 +1,11 @@
 package com.library.controller;
 
-import com.library.entity.Book;
-import com.library.entity.Order;
-import com.library.entity.OrderItem;
-import com.library.entity.User;
+import com.library.entity.*;
 import com.library.repository.BookRepository;
+import com.library.repository.NotificationRepository;
 import com.library.repository.OrderItemRepository;
 import com.library.repository.OrderRepository;
+import com.library.service.NotificationService;
 import com.library.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +25,7 @@ public class OrderItemController {
     private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
     private final BookRepository bookRepository;
+    private final NotificationRepository notificationRepository;
 
     @GetMapping("/order_items")
     public List<OrderItem> getAllOrderItems() {
@@ -236,5 +236,86 @@ public class OrderItemController {
         }
     }
 
+    @PostMapping("/order_items/return")
+    public ResponseEntity<?> returnOrderItem_With_ReturnDate(@RequestParam("order_itemID") Long order_itemID){
+        OrderItem orderItemBorrowing = orderItemRepository.findById(order_itemID).get();
+        Notification notification = new Notification();
+
+        //Ngay hien tai
+        Calendar current = Calendar.getInstance();
+        long currentTime = current.getTimeInMillis();
+
+        //Ngay tra
+        Calendar returnDate = Calendar.getInstance();
+        returnDate.setTime(orderItemBorrowing.getReturnedAt());
+        long returnTime = returnDate.getTimeInMillis();
+
+        int day_range = Integer.parseInt(String.valueOf((returnTime - currentTime)/(1000 * 60 * 60 * 24)));
+
+        if(day_range >= 0){
+            //Tra dung han
+            //Chuyen doi trang thai OrderItem => OK
+            orderItemBorrowing.setStatus(OrderItem.OrderItemStatus.RETURN_OK);
+
+            //Update lại số lượng sách tồn kho
+            orderItemBorrowing.getBook().setAmount(orderItemBorrowing.getBook().getAmount() + orderItemBorrowing.getQuantity());
+
+            //Update số tiền trong Ví ảo của User
+            orderItemBorrowing.getOrder().getUser().setVirtualWallet(
+                    orderItemBorrowing.getOrder().getUser().getVirtualWallet() +
+                            orderItemBorrowing.getQuantity()*orderItemBorrowing.getBook().getPrice() );
+            orderItemRepository.save(orderItemBorrowing);
+
+            //Tạo Notification + in ra cho User
+            notification.setContent("Bạn đã trả sách thành công!\n Hãy kiểm tra thông tin Ví ảo và trạng thái OrderItem đã được cập nhật chưa.\n Cảm ơn!");
+            notification.setUser(orderItemBorrowing.getOrder().getUser());
+            notification.setCreatedAt(current.getTime());
+            notificationRepository.save(notification);
+
+            return ResponseEntity.ok().body(notification);
+        }else {
+            if(day_range >= -30){
+                //set cứng phí phạt mỗi ngày là 500
+                int punishFee = (-day_range) * 500;
+                //Chuyen doi trang thai OrderItem => RETURN_OVERDUE_DATE
+                orderItemBorrowing.setStatus(OrderItem.OrderItemStatus.RETURN_OVERDUE_DATE);
+                //Update lại số lượng sách tồn kho
+                orderItemBorrowing.getBook().setAmount(orderItemBorrowing.getBook().getAmount() + orderItemBorrowing.getQuantity());
+                //Update số tiền trong Ví ảo của User
+                orderItemBorrowing.getOrder().getUser().setVirtualWallet(
+                        orderItemBorrowing.getOrder().getUser().getVirtualWallet() +
+                                orderItemBorrowing.getQuantity()*orderItemBorrowing.getBook().getPrice() -
+                        punishFee);
+                orderItemRepository.save(orderItemBorrowing);
+
+                //Tạo Notification + in ra cho User
+                notification.setContent("Bạn đã trả sách thành công!\n" +
+                        "Số tiền đặt cọc bạn nhận lại sẽ bị trừ một khoản phí ("+punishFee+") do nộp quá hạn trả sách.\n" +
+                        " Hãy kiểm tra thông tin Ví ảo và trạng thái OrderItem đã được cập nhật chưa.\n Cảm ơn!");
+                notification.setUser(orderItemBorrowing.getOrder().getUser());
+                notification.setCreatedAt(current.getTime());
+                notificationRepository.save(notification);
+
+                return ResponseEntity.ok().body(notification);
+            }else{
+                //Chuyen doi trang thai OrderItem => OVERDUE_LIMITED_DATE
+                orderItemBorrowing.setStatus(OrderItem.OrderItemStatus.OVERDUE_LIMITED_DATE);
+                //Update số tiền trong Ví ảo của User => ko thay đổi do đã trừ tiền đặt cọc từ trước => mất cọc
+                //Update Status của User - Danh sách đen
+                orderItemBorrowing.getOrder().getUser().setStatus(User.AccountStatus.BLACKLISTED);
+                orderItemRepository.save(orderItemBorrowing);
+
+                //Tạo Notification + in ra cho User
+                notification.setContent("Bạn đã trả sách thành công!\n" +
+                        "Bạn sẽ không nhận lại số tiền đặt cọc do nộp quá hạn trả sách cho phép ( 30 ngày).\n" +
+                        " Hãy kiểm tra thông tin Ví ảo và trạng thái OrderItem đã được cập nhật chưa.\n Cảm ơn!");
+                notification.setUser(orderItemBorrowing.getOrder().getUser());
+                notification.setCreatedAt(current.getTime());
+                notificationRepository.save(notification);
+
+                return ResponseEntity.ok().body(notification);
+            }
+        }
+    }
 
 }
