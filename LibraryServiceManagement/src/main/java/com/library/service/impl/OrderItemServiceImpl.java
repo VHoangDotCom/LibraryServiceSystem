@@ -37,6 +37,11 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
+    public List<OrderItem> getListRunningOutDateOrderItem(){
+        return orderItemRepository.getAllOrderItemRunningOutOfDate();
+    }
+
+    @Override
     public String deleteOrderItem(Long id) {
         OrderItem orderItem = orderItemRepository.findById(id).get();
         if(orderItem == null){

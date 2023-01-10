@@ -2,7 +2,11 @@ package com.library.service.cron_job;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,8 +16,10 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class SendMailJob {
+@Component
+public class EventCreator {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EventCreator.class);
      /*
     ** CronTab Expression meaning
     * Seconds - Minutes - Hours - Day of month - Month - Day of week - Year
@@ -44,8 +50,10 @@ public class SendMailJob {
      * It will automatically be promoted to long.
      */
 
-//    private final MailService mailService;
-//
+    //@Scheduled(cron = "[Seconds] [Minutes] [Hours] [Day of month] [Month] [Day of week] [Year]")
+
+    //private final MailService mailService;
+
 //    @Scheduled(cron = "*/1 * * * * *")//every seconds
 //    public void  triggerMail() throws MessagingException, InterruptedException {
 //        mailService.sendMailWithAttachment("viethoang2001gun@gmail.com",
@@ -53,6 +61,11 @@ public class SendMailJob {
 //                "Hi Viet Hoang",
 //                "D:\\Themes\\Anime\\1.jpg");
 //        Thread.sleep(1000L);
+//    }
+
+//    @Scheduled(cron = " 0 0/1 * * * *")//every 1 minute
+//    public void  triggerEveryMinute() {
+//        log.info("Every minute!!");
 //    }
 
 }

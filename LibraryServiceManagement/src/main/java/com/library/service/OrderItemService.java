@@ -19,4 +19,5 @@ public interface OrderItemService {
     OrderItem updateOrderItem(Long id, OrderItem orderItem);
     OrderItem updateOrderItemWhenBuying(Long id, OrderItem orderItem);
 
+    List<OrderItem> getListRunningOutDateOrderItem();
 }
