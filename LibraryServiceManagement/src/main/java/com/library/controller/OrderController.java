@@ -6,11 +6,14 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.library.entity.Order;
+import com.library.entity.OrderItem;
 import com.library.entity.User;
 import com.library.entity.email.MailRequest;
+import com.library.repository.OrderItemRepository;
 import com.library.repository.OrderRepository;
 import com.library.repository.UserRepository;
 import com.library.service.MailService;
+import com.library.service.OrderItemService;
 import com.library.service.OrderService;
 import com.library.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +43,8 @@ public class OrderController {
     private final UserRepository userRepository;
     private final UserService userService;
     private final MailService mailService;
+    private final OrderItemService orderItemService;
+    private final OrderItemRepository orderItemRepository;
 
     @GetMapping("/orders")
     public List<Order> getAllOrders() {
@@ -116,6 +121,7 @@ public class OrderController {
 
         Order orderExisted = orderRepository.findById(orderID).get();
         User userFind = userRepository.findById(orderExisted.getUser().getId()).get();
+        List<OrderItem> itemList = orderItemService.getListOrderItemByOrderID(orderExisted.getOrderId());
         //List<Order> listOrderUserFind = orderService.getListOrderByUserID(userFind.getId());
 
         if(userFind != null){
@@ -129,6 +135,11 @@ public class OrderController {
 
                     userFind.setVirtualWallet(userFind.getVirtualWallet() - orderExisted.getTotalDeposit());
                     userRepository.save(userFind);
+
+                    for(OrderItem orderItem : itemList){
+                        orderItem.setStatus(OrderItem.OrderItemStatus.BORROWING);
+                        orderItemRepository.save(orderItem);
+                    }
 
                     request.setFrom("viethoang2001gun@gmail.com");
                     request.setTo(orderExisted.getEmail());
@@ -164,6 +175,11 @@ public class OrderController {
                     userFind.setVirtualWallet(userFind.getVirtualWallet() - ( orderExisted.getTotalDeposit() + orderExisted.getTotalRent() ));
                     userRepository.save(userFind);
 
+                    for(OrderItem orderItem : itemList){
+                        orderItem.setStatus(OrderItem.OrderItemStatus.BORROWING);
+                        orderItemRepository.save(orderItem);
+                    }
+
                     request.setFrom("viethoang2001gun@gmail.com");
                     request.setTo(orderExisted.getEmail());
                     request.setSubject("Hi there!");
@@ -198,6 +214,7 @@ public class OrderController {
 
         Order orderExisted = orderRepository.findById(orderID).get();
         User userFind = userRepository.findById(orderExisted.getUser().getId()).get();
+        List<OrderItem> itemList = orderItemService.getListOrderItemByOrderID(orderExisted.getOrderId());
 
         if(userFind != null){
             if(orderExisted.getType() == Order.OrderType.VIRTUAL_WALLET){
@@ -210,6 +227,11 @@ public class OrderController {
 
                     userFind.setVirtualWallet(userFind.getVirtualWallet() - orderExisted.getTotalDeposit());
                     userRepository.save(userFind);
+
+                    for(OrderItem orderItem : itemList){
+                        orderItem.setStatus(OrderItem.OrderItemStatus.BUY_SUCCESS);
+                        orderItemRepository.save(orderItem);
+                    }
 
                     request.setFrom("viethoang2001gun@gmail.com");
                     request.setTo(orderExisted.getEmail());
@@ -233,6 +255,11 @@ public class OrderController {
             }else{
                 orderExisted.setStatus(Order.OrderStatus.COMPLETED);
                 orderRepository.save(orderExisted);
+
+                for(OrderItem orderItem : itemList){
+                    orderItem.setStatus(OrderItem.OrderItemStatus.BUY_SUCCESS);
+                    orderItemRepository.save(orderItem);
+                }
 
                 request.setFrom("viethoang2001gun@gmail.com");
                 request.setTo(orderExisted.getEmail());

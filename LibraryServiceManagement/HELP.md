@@ -478,6 +478,27 @@
   ![alt text]()
 
 
+9. Return Order Item - Book by OrderItemID ( Member Logged In role )
+- http://localhost:8080/api/order_items/return?order_itemID=2
+- Post
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
+- Trường hợp Hạn trả đúng hạn 
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673347543/api_-_Tra_sach_Dung_han_ihdssk.png)
+- Trường hợp Hạn trả quá hạn
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673347543/api_-_Tra_Sach_Qua_Han_gzdwdt.png)
+- Trường hợp Hạn trả quá hạn 30 ngày ( limited date)
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673347543/api_-_Tra_sach_Qua_30_ngay_flbpqo.png)
+
+
+10. Các Status của OrderItem
+- PENDING, //Dang trong gio hang
+- BORROWING,//user is borrowing this book
+- RETURN_OVERDUE_DATE,// qua han tra sach
+- OVERDUE_LIMITED_DATE,// qua han cho phep muon ( qua 30 ngay )
+- TORN_OR_LOST, //Rach hoac mat sach
+- RETURN_OK //Tra sach dung han
+
 
 ## Notification (Thao tác như Book )
 1. Get List Notifications
@@ -527,3 +548,4 @@
 - Header : Thêm trường Authorization
     Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
     ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673333531/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Notifications_List_by_UserID_dhc9vy.png)
+

@@ -21,6 +21,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItem createOrderItem(OrderItem orderItem) {
+        orderItem.setStatus(OrderItem.OrderItemStatus.PENDING);
         return orderItemRepository.save(orderItem);
     }
 
@@ -58,6 +59,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItemExisted.setQuantity(orderItem.getQuantity());
         orderItemExisted.setBorrowedAt(orderItem.getBorrowedAt());
         orderItemExisted.setReturnedAt(orderItem.getReturnedAt());
+        orderItemExisted.setStatus(orderItem.getStatus());
         orderItemRepository.save(orderItemExisted);
         return orderItemExisted;
     }
@@ -69,5 +71,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItemRepository.save(orderItemExisted);
         return orderItemExisted;
     }
+
 
 }

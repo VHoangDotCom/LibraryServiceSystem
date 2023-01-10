@@ -26,7 +26,10 @@ public class RoleSeeding {
 
     @PostConstruct
     public void saveRole() {
-        roleRepository.saveAll(roles);
+        List<Role> listRoleExisted = roleRepository.findAll();
+        if(listRoleExisted == null){
+            roleRepository.saveAll(roles);
+        }
     }
 }
 
