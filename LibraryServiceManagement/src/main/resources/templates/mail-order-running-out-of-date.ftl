@@ -52,9 +52,10 @@
                                     <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
                                         <tr>
                                             <td>
-                                                <h1 style="color: #1e1e2d; font-weight: 500; margin: 0; font-size: 32px;font-family:'Rubik',sans-serif;">Hi Jhon,</h1>
-                                                <p style="font-size:15px; color:#455056; line-height:24px; margin:8px 0 30px;">Here's a list
-                                                    of activities which needs your attention.</p>
+                                                <h1 style="color: #1e1e2d; font-weight: 500; margin: 0; font-size: 32px;font-family:'Rubik',sans-serif;">Xin chào ${username}!</h1>
+                                                <p style="font-size:15px; color:#455056; line-height:24px; margin:8px 0 30px;">Có vẻ như cuốn sách bạn đang mượn sắp hết hạn rồi!</p>
+                                                <br />
+                                                <p style="font-size:15px; color:#455056; line-height:24px; margin:8px 0 30px;">Hạn cuối là ngày mai đó! Hãy nhớ trả đúng hạn nhé!</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -64,44 +65,16 @@
                                                             style="border-bottom:1px solid #ebebeb; margin-bottom:26px; padding-bottom:29px; display:block;">
                                                         <td width="84">
                                                             <a style="height: 64px; width: 64px; text-align:center; display:block;">
-                                                                <img src="https://api.adorable.io/avatars/60/abott@adorable.png" alt="Profile Picture" style="border-radius:50%;">
+                                                                <img src="${bookImage}" alt="Profile Picture" style="border-radius:50%;">
                                                             </a>
                                                         </td>
                                                         <td style="vertical-align:top;">
                                                             <h3 style="color: #4d4d4d; font-size: 20px; font-weight: 400; line-height: 30px; margin-bottom: 3px; margin-top:0;">
-                                                                <strong>Robert Oliver</strong> applied for appointment on 10<sup>th</sup> May 2019 11:00AM.</h3>
-                                                            <span style="color:#737373; font-size:14px;">5 Minutes Ago</span>
+                                                                <strong>${bookName}</strong> mượn từ ngày ${borrowDate}.</h3>
+                                                            <span style="color:#737373; font-size:20px;">Số lượng: ${amount}</span>
                                                         </td>
                                                     </tr>
-                                                    <tr
-                                                            style="border-bottom:1px solid #ebebeb; margin-bottom:26px; padding-bottom:29px; display:block;">
-                                                        <td width="84">
-                                                            <a style="height: 64px; width: 64px; text-align:center; display:block;">
-                                                                <img src="https://api.adorable.io/avatars/60/ura@adorable.png" alt="Profile Picture"
-                                                                     style="border-radius:50%;">
-                                                            </a>
-                                                        </td>
-                                                        <td style="vertical-align:top;">
-                                                            <h3
-                                                                    style="color: #4d4d4d; font-size: 20px; font-weight: 400; line-height: 30px; margin-bottom: 3px; margin-top:0;">
-                                                                <strong>Andrea Cole</strong> discharged from treatment yesterday.</h3>
-                                                            <span style="color:#737373; font-size:14px;">15 Minutes Ago</span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr style="display:block;">
-                                                        <td width="84">
-                                                            <a style="text-align:center; display:block; height: 64px; width: 64px; ">
-                                                                <img src="https://api.adorable.io/avatars/60/mura@adorable.png" style="border-radius:50%;"
-                                                                     alt="Profile Picture">
-                                                            </a>
-                                                        </td>
-                                                        <td style="vertical-align:top;">
-                                                            <h3
-                                                                    style="color: #4d4d4d; font-size: 20px; font-weight: 400; line-height: 30px; margin-bottom: 3px; margin-top:0;">
-                                                                <strong>Scott Mason</strong> applied for appointment on 13<sup>th</sup> May 2019 12:00PM.</h3>
-                                                            <span style="color:#737373; font-size:14px;">30 Minutes ago</span>
-                                                        </td>
-                                                    </tr>
+
                                                 </table>
                                             </td>
                                         </tr>
@@ -116,7 +89,10 @@
                 </tr>
                 <tr>
                     <td style="text-align:center;">
-                        <p style="font-size:14px; color:#455056bd; line-height:18px; margin:0 0 0;">&copy; <strong>www.rakeshmandal.com</strong></p>
+                        <p style="font-size:14px; color:#455056bd; line-height:18px; margin:0 0 0;">&copy; <strong>
+                                <b>Chủ tịch <del>Trịnh</del> Nguyễn Văn Quyết</b>
+                                <br>2023, Hanoi<br>
+                            </strong></p>
                     </td>
                 </tr>
                 <tr>

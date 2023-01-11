@@ -1,10 +1,13 @@
 package com.library.service.impl;
 
+import com.library.entity.OrderItem;
 import com.library.entity.User;
 import com.library.entity.email.MailRequest;
 import com.library.entity.email.MailResponse;
+import com.library.repository.OrderItemRepository;
 import com.library.repository.UserRepository;
 import com.library.service.MailService;
+import com.library.service.OrderItemService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -28,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +47,8 @@ public class MailServiceImpl implements MailService {
 
     @Autowired
     private Configuration config;
+
+    private final OrderItemRepository orderItemRepository;
 
     private final UserRepository userRepository;
 
@@ -65,7 +71,7 @@ public class MailServiceImpl implements MailService {
             "anhhvth2010043@fpt.edu.vn"*/
     };
 
-   /* @Scheduled(cron = " 0 0/1 * * * *")//every 1 minute
+    /*@Scheduled(cron = " 0 0/1 * * * *")//every 1 minute
     public void  triggerEveryMinute() throws MessagingException {
         //Working normally
         List<String> Bcc_mail = new ArrayList<String>();
@@ -87,6 +93,56 @@ public class MailServiceImpl implements MailService {
         mailSender.send(message);
         log.info("Every minute!!");
     }*/
+
+        @Scheduled(cron = "0 30 6 ? * *")// Fire at 6:30 AM every day : 0 30 6 ? * *
+    public void  sendMailToRunningOutOfDateOrder() throws MessagingException {
+        //Working normally
+        List<String> Bcc_mail = new ArrayList<String>();
+        //List<OrderItem> orderItemList = orderItemService.getListRunningOutDateOrderItem();
+        List<OrderItem> orderItemList = orderItemRepository.getAllOrderItemRunningOutOfDate();
+
+        for(OrderItem orderItem :orderItemList){
+            Bcc_mail.add(orderItem.getOrder().getEmail());
+        }
+
+        Bcc_Mail = Bcc_mail.toArray(new String[0]);
+
+        MailResponse response = new MailResponse();
+        MimeMessage message = mailSender.createMimeMessage();
+        if(orderItemList != null){
+            try {
+                // set mediaType
+                MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                        StandardCharsets.UTF_8.name());
+
+                Map<String, Object> model = new HashMap<>();
+
+                for(OrderItem orderItem :orderItemList){
+                    model.put("username", orderItem.getOrder().getFullName());
+                    model.put("bookName", orderItem.getBook().getTitle());
+                    model.put("bookImage", orderItem.getBook().getThumbnail());
+                    model.put("amount", orderItem.getQuantity());
+                    model.put("borrowDate", orderItem.getBorrowedAt());
+                }
+
+                Template t = config.getTemplate("mail-order-running-out-of-date.ftl");
+                String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+
+                helper.setText(html, true);
+                helper.setSubject("Xin chao");
+                helper.setFrom("viethoang2001gun@gmail.com");
+                helper.setBcc(Bcc_Mail);
+
+                mailSender.send(message);
+                log.info("Every minute!!");
+                response.setStatus(Boolean.TRUE);
+
+            } catch (MessagingException | IOException | TemplateException e) {
+                response.setMessage("Mail Sending failure : "+e.getMessage());
+                response.setStatus(Boolean.FALSE);
+            }
+        }
+    }
 
     @Override
     public void sendMultipleMail(String toEmail, String body, String subject) throws MessagingException {
