@@ -1,9 +1,11 @@
 package com.library.service.impl;
 
+import com.library.entity.Notification;
 import com.library.entity.OrderItem;
 import com.library.entity.User;
 import com.library.entity.email.MailRequest;
 import com.library.entity.email.MailResponse;
+import com.library.repository.NotificationRepository;
 import com.library.repository.OrderItemRepository;
 import com.library.repository.UserRepository;
 import com.library.service.MailService;
@@ -30,10 +32,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @EnableScheduling
@@ -49,6 +48,7 @@ public class MailServiceImpl implements MailService {
     private Configuration config;
 
     private final OrderItemRepository orderItemRepository;
+    private final NotificationRepository notificationRepository;
 
     private final UserRepository userRepository;
 
@@ -95,7 +95,7 @@ public class MailServiceImpl implements MailService {
     }*/
 
         @Scheduled(cron = "0 30 6 ? * *")// Fire at 6:30 AM every day : 0 30 6 ? * *
-    public void  sendMailToRunningOutOfDateOrder() throws MessagingException {
+    public void  sendMailToRunningOutOfDateOrder() {
         //Working normally
         List<String> Bcc_mail = new ArrayList<String>();
         //List<OrderItem> orderItemList = orderItemService.getListRunningOutDateOrderItem();
@@ -126,6 +126,86 @@ public class MailServiceImpl implements MailService {
                 }
 
                 Template t = config.getTemplate("mail-order-running-out-of-date.ftl");
+                String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+
+                helper.setText(html, true);
+                helper.setSubject("Xin chao");
+                helper.setFrom("viethoang2001gun@gmail.com");
+                helper.setBcc(Bcc_Mail);
+
+                mailSender.send(message);
+                log.info("Every minute!!");
+                response.setStatus(Boolean.TRUE);
+
+            } catch (MessagingException | IOException | TemplateException e) {
+                response.setMessage("Mail Sending failure : "+e.getMessage());
+                response.setStatus(Boolean.FALSE);
+            }
+        }
+    }
+
+    @Scheduled(cron = "0 30 6 ? * *")// Fire at 6:30 AM every day : 0 30 6 ? * *
+    public void  sendMail_Notification_Out_Of_30_Day_Borrowing() {
+        //Working normally
+        List<String> Bcc_mail = new ArrayList<String>();
+        List<OrderItem> orderItemList = orderItemRepository.findAll();
+
+        for(OrderItem orderItem :orderItemList){
+            //Ngay hien tai
+            Calendar current = Calendar.getInstance();
+            long currentTime = current.getTimeInMillis();
+
+            //Ngay tra
+            Calendar returnDate = Calendar.getInstance();
+            returnDate.setTime(orderItem.getReturnedAt());
+            long returnTime = returnDate.getTimeInMillis();
+
+            int day_range = Integer.parseInt(String.valueOf((returnTime - currentTime)/(1000 * 60 * 60 * 24)));
+
+            if(day_range < -30){
+                if(orderItem.getStatus() != OrderItem.OrderItemStatus.OVERDUE_LIMITED_DATE){
+                    //Chuyen doi trang thai OrderItem => OVERDUE_LIMITED_DATE
+                    orderItem.setStatus(OrderItem.OrderItemStatus.OVERDUE_LIMITED_DATE);
+                    //Update số tiền trong Ví ảo của User => ko thay đổi do đã trừ tiền đặt cọc từ trước => mất cọc
+                    //Update Status của User - Danh sách đen
+                    orderItem.getOrder().getUser().setStatus(User.AccountStatus.BLACKLISTED);
+                    orderItemRepository.save(orderItem);
+
+                    Notification notification = new Notification();
+                    //Tạo Notification + in ra cho User
+                    notification.setContent("Bạn đã quá hạn mức cho phép mượn sách!\n" +
+                            "Bạn sẽ không nhận lại số tiền đặt cọc do nộp quá hạn trả sách cho phép ( 30 ngày).\n" +
+                            " Hãy kiểm tra thông tin Ví ảo và trạng thái OrderItem đã được cập nhật chưa.\n Cảm ơn!");
+                    notification.setUser(orderItem.getOrder().getUser());
+                    notification.setCreatedAt(current.getTime());
+                    notificationRepository.save(notification);
+
+                    Bcc_mail.add(orderItem.getOrder().getEmail());
+                }
+            }
+        }
+
+        Bcc_Mail = Bcc_mail.toArray(new String[0]);
+
+        MailResponse response = new MailResponse();
+        MimeMessage message = mailSender.createMimeMessage();
+        if(orderItemList != null){
+            try {
+                // set mediaType
+                MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                        StandardCharsets.UTF_8.name());
+
+                Map<String, Object> model = new HashMap<>();
+
+                for(OrderItem orderItem :orderItemList){
+                    model.put("username", orderItem.getOrder().getFullName());
+                    model.put("bookName", orderItem.getBook().getTitle());
+                    model.put("bookImage", orderItem.getBook().getThumbnail());
+                    model.put("amount", orderItem.getQuantity());
+                    model.put("borrowDate", orderItem.getBorrowedAt());
+                }
+
+                Template t = config.getTemplate("mail-order-out-of-30-day.ftl");
                 String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
                 helper.setText(html, true);

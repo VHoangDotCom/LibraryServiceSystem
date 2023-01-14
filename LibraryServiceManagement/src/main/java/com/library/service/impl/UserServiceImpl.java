@@ -64,7 +64,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         roles.add(role1);
         user.setRoles(roles);
         user.setVirtualWallet(50000);
-        user.setAvatar("https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg");
+        if(user.getAvatar() == null){
+            user.setAvatar("https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg");
+        }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         log.info("Saving new user {} to the database", user.getName());
@@ -140,6 +142,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userExisted.setAddress(user.getAddress());
         userExisted.setStatus(user.getStatus());
         userExisted.setVirtualWallet(user.getVirtualWallet());
+        userExisted.setEmail(user.getEmail());
 
         userRepo.save(userExisted);
         return userExisted;
@@ -153,6 +156,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setAddress(user.getAddress());
         user.setStatus(user.getStatus());
         user.setVirtualWallet(user.getVirtualWallet());
+        user.setEmail(user.getEmail());
 
         userRepo.save(user);
         return user;

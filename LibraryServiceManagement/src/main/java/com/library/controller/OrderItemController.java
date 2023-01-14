@@ -298,22 +298,28 @@ public class OrderItemController {
 
                 return ResponseEntity.ok().body(notification);
             }else{
-                //Chuyen doi trang thai OrderItem => OVERDUE_LIMITED_DATE
-                orderItemBorrowing.setStatus(OrderItem.OrderItemStatus.OVERDUE_LIMITED_DATE);
-                //Update số tiền trong Ví ảo của User => ko thay đổi do đã trừ tiền đặt cọc từ trước => mất cọc
-                //Update Status của User - Danh sách đen
-                orderItemBorrowing.getOrder().getUser().setStatus(User.AccountStatus.BLACKLISTED);
-                orderItemRepository.save(orderItemBorrowing);
+                if(orderItemBorrowing.getStatus() != OrderItem.OrderItemStatus.OVERDUE_LIMITED_DATE){
+                    //Chuyen doi trang thai OrderItem => OVERDUE_LIMITED_DATE
+                    orderItemBorrowing.setStatus(OrderItem.OrderItemStatus.OVERDUE_LIMITED_DATE);
+                    //Update số tiền trong Ví ảo của User => ko thay đổi do đã trừ tiền đặt cọc từ trước => mất cọc
+                    //Update Status của User - Danh sách đen
+                    orderItemBorrowing.getOrder().getUser().setStatus(User.AccountStatus.BLACKLISTED);
+                    orderItemRepository.save(orderItemBorrowing);
 
-                //Tạo Notification + in ra cho User
-                notification.setContent("Bạn đã trả sách thành công!\n" +
-                        "Bạn sẽ không nhận lại số tiền đặt cọc do nộp quá hạn trả sách cho phép ( 30 ngày).\n" +
-                        " Hãy kiểm tra thông tin Ví ảo và trạng thái OrderItem đã được cập nhật chưa.\n Cảm ơn!");
-                notification.setUser(orderItemBorrowing.getOrder().getUser());
-                notification.setCreatedAt(current.getTime());
-                notificationRepository.save(notification);
+                    //Tạo Notification + in ra cho User
+                    notification.setContent("Bạn đã trả sách thành công!\n" +
+                            "Bạn sẽ không nhận lại số tiền đặt cọc do nộp quá hạn trả sách cho phép ( 30 ngày).\n" +
+                            " Hãy kiểm tra thông tin Ví ảo và trạng thái OrderItem đã được cập nhật chưa.\n Cảm ơn!");
+                    notification.setUser(orderItemBorrowing.getOrder().getUser());
+                    notification.setCreatedAt(current.getTime());
+                    notificationRepository.save(notification);
 
-                return ResponseEntity.ok().body(notification);
+                    return ResponseEntity.ok().body(notification);
+                }else{
+                    return ResponseEntity.ok().body("Hệ thống đã tự động hủy quá trình mượn sách của người dùng này!" +
+                            "\n Trạng thái tài khoản và số dư Ví ảo sẽ được tự động cập nhật!");
+                }
+
             }
         }
     }

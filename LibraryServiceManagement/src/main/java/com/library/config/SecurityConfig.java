@@ -124,7 +124,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             //Order Item
             "/api/order_items",
-            "/api/order_items/order/**",
 
             //Notification
             "/api/notifications/user/{userId}"
@@ -140,7 +139,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             //Book
             "/api/books/add/**",
-            "/api/orders/add/**",
 
             //Notification
             "/api/notifications/add/**"
