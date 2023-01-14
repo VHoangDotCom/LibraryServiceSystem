@@ -181,7 +181,8 @@ public class UserController {
     }
 
     @PostMapping("/user/resetPassword")
-    public String resetPassword(@RequestBody PasswordModel passwordModel,
+    public String resetPassword(@RequestParam("clientLink") String clientLink,
+                                @RequestBody PasswordModel passwordModel,
                                 HttpServletRequest request,
                                 MailRequest mailRequest)
             throws MessagingException
@@ -191,7 +192,9 @@ public class UserController {
         if (user!= null) {
             String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
-            url = passwordResetTokenMail(user, applicationUrl(request), token);
+            //url = passwordResetTokenMail(user, applicationUrl(request), token);
+            //Get Server Request by Client
+            url = passwordResetTokenMail(user, applicationUrlClient(clientLink), token);
            /* mailService.sendMailWithoutAttachment(
                     "" + user.getEmail(),
                     "\tIf you have send Reset Password Request, please enter this link to reset your password: \n "+ url +
@@ -293,8 +296,11 @@ public class UserController {
     }
 
     private String passwordResetTokenMail(User user, String applicationUrl, String token) {
-        String url =
+       /* String url =
                 applicationUrl + "/savePassword?token="
+                        + token;*/
+        String url =
+                applicationUrl + "/savePassword/"
                         + token;
         //sendVerificationEmail
         log.info("Click the link to Reset your password: {}",
@@ -303,12 +309,16 @@ public class UserController {
     }
 
     private String applicationUrl(HttpServletRequest request) {
-        return "http://" +
+        return "http://" + // http://locallhost:3000
                 request.getServerName() +
                 ":" +
                 request.getServerPort() +
                 "/api/user" +
                 request.getContextPath();
+    }
+
+    private String applicationUrlClient(String request) {
+        return request;
     }
 
     @GetMapping("/users/export-to-excel")
