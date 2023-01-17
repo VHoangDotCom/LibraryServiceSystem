@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -35,6 +36,15 @@ public class OrderItemController {
     @GetMapping("/order_items/order")
     public List<OrderItem> getOrderItemsByOrderID(@RequestParam("orderID") String orderID){
         return orderItemService.getListOrderItemByOrderID(orderID);
+    }
+
+    @GetMapping("/order_items/user")
+    public ResponseEntity<?> getOrderItemListByUserID(@RequestParam("userID") Long userID) {
+        try{
+            return ResponseEntity.ok().body(orderItemService.getListOrderItemByUserID(userID));
+        } catch (NullPointerException ex){
+            return ResponseEntity.badRequest().body(ex);
+        }
     }
 
     @PostMapping("/order_items/add")
@@ -286,6 +296,8 @@ public class OrderItemController {
                         orderItemBorrowing.getOrder().getUser().getVirtualWallet() +
                                 orderItemBorrowing.getQuantity()*orderItemBorrowing.getBook().getPrice() -
                         punishFee);
+                //Update tổng tiền thuê ( + thêm tiền phạt ) trong Order
+                orderItemBorrowing.getOrder().setTotalRent(orderItemBorrowing.getOrder().getTotalRent() + punishFee);
                 orderItemRepository.save(orderItemBorrowing);
 
                 //Tạo Notification + in ra cho User
@@ -321,6 +333,98 @@ public class OrderItemController {
                 }
 
             }
+        }
+    }
+
+    //Report API
+    @GetMapping("/order_items/date-year")
+    public ResponseEntity<?> getTotalOrderItemInYear(@RequestParam("year") int year){
+       try{
+           return ResponseEntity.ok().body(orderItemService.getListOrderItemInYear(year));
+       }catch (Exception ex){
+           return ResponseEntity.badRequest().body(ex);
+       }
+    }
+    @GetMapping("/order_items/date")
+    public List<OrderItem> getList_OrderItem_In_Year_Month(@RequestParam("year") int year,
+                                                              @RequestParam("month") int month){
+        return orderItemService.getListOrderItemInYearAndMonth(year, month);
+    }
+    @GetMapping("/order_items/user-year")
+    public ResponseEntity<?> getOrderItemListByUserID_Per_Year(@RequestParam("userID") Long userID,
+                                                      @RequestParam("year") int year) {
+        try{
+            return ResponseEntity.ok().body(orderItemService.getList_OrderItem_By_UserID_Per_Year(userID, year));
+        } catch (NullPointerException ex){
+            return ResponseEntity.badRequest().body(ex);
+        }
+    }
+    @GetMapping("/order_items/user-date")
+    public ResponseEntity<?> getOrderItemListByUserID_In_Month_Year(@RequestParam("userID") Long userID,
+                                                                    @RequestParam("year") int year,
+                                                                    @RequestParam("month") int month  ) {
+        try{
+            return ResponseEntity.ok().body(orderItemService.getList_OrderItem_By_UserID_In_Month(userID, year, month));
+        } catch (NullPointerException ex){
+            return ResponseEntity.badRequest().body(ex);
+        }
+    }
+    @GetMapping("/order_items/user-date/{userID}")
+    public ResponseEntity<?> getOrderItemListByUserID_In_Month_Year_Path_Variable(@PathVariable Long userID,
+                                                                    @RequestParam("year") int year,
+                                                                    @RequestParam("month") int month  ) {
+        try{
+            return ResponseEntity.ok().body(orderItemService.getList_OrderItem_By_UserID_In_Month(userID, year, month));
+        } catch (NullPointerException ex){
+            return ResponseEntity.badRequest().body(ex);
+        }
+    }
+    @GetMapping("/order_items/total-profit")
+    public ResponseEntity<?> getTotalProfitOfStore(){
+        try{
+            return ResponseEntity.ok().body("Total profit of company: "+orderItemService.getTotalProfit()+"$");
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex);
+        }
+    }
+    @GetMapping("/order_items/total-profit-year")
+    public ResponseEntity<?> getTotalProfitOfStoreInYear(@RequestParam("year") int year){
+        try{
+            return ResponseEntity.ok().body("Total profit of company in "+year+": "
+                    +orderItemService.getTotalProfitInYear(year)+"$");
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex);
+        }
+    }
+    @GetMapping("/order_items/total-profit-year-month")
+    public ResponseEntity<?> getTotalProfitOfStoreInYear(@RequestParam("year") int year,
+                                                         @RequestParam("month") int month){
+        try{
+            return ResponseEntity.ok().body("Total profit of company in "+month+"/"+year+": "
+                    +orderItemService.getTotalProfitInMonthOfYear(year,month)+"$");
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex);
+        }
+    }
+    @GetMapping("/order_items/user/total-profit-year")
+    public ResponseEntity<?> getTotalProfitOfUserByYear(@RequestParam("userID") int userID,
+                                                         @RequestParam("year") int year){
+        try{
+            return ResponseEntity.ok().body("Total profit of company in "+year+" from User "+userID+": "
+                    +orderItemService.getTotalProfitOfUserByYear(year,userID)+"$");
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex);
+        }
+    }
+    @GetMapping("/order_items/user/total-profit-date")
+    public ResponseEntity<?> getTotalProfitOfUserByYear(@RequestParam("userID") int userID,
+                                                        @RequestParam("year") int year,
+                                                        @RequestParam("month") int month){
+        try{
+            return ResponseEntity.ok().body("Total profit of company in "+month +"/"+year+" from User "+userID+": "
+                    +orderItemService.getTotalProfitOfUserByYear_Month(year,month,userID)+"$");
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex);
         }
     }
 

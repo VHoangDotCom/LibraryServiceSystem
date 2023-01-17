@@ -20,4 +20,15 @@ public interface OrderItemService {
     OrderItem updateOrderItemWhenBuying(Long id, OrderItem orderItem);
 
     List<OrderItem> getListRunningOutDateOrderItem();
+
+    List<OrderItem> getListOrderItemByUserID(Long userId);
+    List<OrderItem> getListOrderItemInYear(int year);
+    List<OrderItem> getListOrderItemInYearAndMonth(int year, int month);
+    List<OrderItem> getList_OrderItem_By_UserID_Per_Year(Long userId, int year);
+    List<OrderItem> getList_OrderItem_By_UserID_In_Month(Long userId, int year, int month);
+    int getTotalProfit();
+    int getTotalProfitInYear(int year);
+    int getTotalProfitInMonthOfYear(int year, int month);
+    int getTotalProfitOfUserByYear(int year, int userID);
+    int getTotalProfitOfUserByYear_Month(int year,int month, int userID);
 }

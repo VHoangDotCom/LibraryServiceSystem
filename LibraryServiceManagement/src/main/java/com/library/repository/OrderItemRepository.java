@@ -18,4 +18,12 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
             nativeQuery = true
     )
     List<OrderItem> getAllOrderItemRunningOutOfDate();
+
+    @Query(
+            value = "SELECT * FROM order_item s " +
+                    "where MONTH(s.borrowed_at) = :monthDate and " +
+                    " YEAR(s.borrowed_at) = :yearDate ",
+            nativeQuery = true
+    )
+    List<OrderItem> getAllOrderItemByMonthAndYear(int monthDate, int yearDate);
 }

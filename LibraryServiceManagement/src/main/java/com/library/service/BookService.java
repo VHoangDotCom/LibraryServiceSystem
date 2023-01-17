@@ -14,4 +14,6 @@ public interface BookService {
     String deleteBook(Long id);
 
     Book updateBook(Long id, Book book);
+
+    List<Book> getAllBookByKeyword(String keyword);
 }

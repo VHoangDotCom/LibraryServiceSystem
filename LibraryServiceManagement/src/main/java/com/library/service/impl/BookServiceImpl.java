@@ -87,7 +87,10 @@ public class BookServiceImpl implements BookService {
         bookExisted.setCategory(book.getCategory());
         bookRepository.save(bookExisted);
         return bookExisted;
-
     }
 
+    @Override
+    public List<Book> getAllBookByKeyword(String keyword) {
+        return bookRepository.getAllBooksByKeyword(keyword);
+    }
 }
