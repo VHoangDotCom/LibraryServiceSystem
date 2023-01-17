@@ -272,6 +272,10 @@
 - http://localhost:8080/api/books/category/1
 - Get
 
+7. Get List Book by Keyword
+- http://localhost:8080/api/books/search?keyword=sc
+- Get
+
 
 ## Order (Thao tác như Category )
 1. Get List Orders - Role Admin
@@ -500,6 +504,13 @@
 - RETURN_OK //Tra sach dung han
 
 
+11. Get List OrderItem by UserID
+- http://localhost:8080/api/order_items/user?userID=4
+- Get
+-  Header : Thêm trường Authorization
+   Value : Bearer access_token  ( access token phải là của Admin )
+
+
 ## Notification (Thao tác như Book )
 1. Get List Notifications
 - http://localhost:8080/api/notifications
@@ -549,3 +560,58 @@
     Value : Bearer access_token_khi_login  ( access token phải là của MEMBER tro len )
     ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1673333531/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Notifications_List_by_UserID_dhc9vy.png)
 
+
+## Report - statistical (Báo cáo - thống kê)
+1. Hiển thị list order item trong năm ( năm truyền vào param ) => passed
+- http://localhost:8080/api/order_items/date-year?year=2022
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+2. Hiển thị list order item theo năm và tháng ( năm, tháng truyền vào param ) => passed
+- http://localhost:8080/api/order_items/date?year=2022&month=7
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+3. Hiển thị list order item của User theo năm ( năm, userID truyền vào param ) => passed
+- http://localhost:8080/api/order_items/user-year?userID=4&year=2023
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+4. Hiển thị list order item của User theo năm, tháng cụ thể => passed
+- http://localhost:8080/api/order_items/user-date?userID=1&year=2023&month=1
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+5. Hiển thị tổng doanh thu từ trươc đến nay => passed
+- http://localhost:8080/api/order_items/total-profit
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+6. Hiển thị tổng doanh thu theo năm => passed
+- http://localhost:8080/api/order_items/total-profit-year?year=2023 => passed
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+7. Hiển thị tổng doanh thu theo năm, tháng cụ thể => passed
+- http://localhost:8080/api/order_items/total-profit-year-month?year=2022&month=5
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+8. Hiển thị tổng doanh thu từ User theo năm => passed
+- http://localhost:8080/api/order_items/user/total-profit-year?userID=4&year=2023
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+
+9. Hiển thị tổng doanh thu từ User theo năm-tháng cụ thể => passed
+- http://localhost:8080/api/order_items/user/total-profit-date?userID=1&year=2023&month=1
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )

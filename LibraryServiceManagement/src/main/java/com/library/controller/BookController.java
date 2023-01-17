@@ -29,6 +29,12 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
+    @GetMapping("/books/search")
+    public List<Book> getAllBooksByKeyword(@RequestParam("keyword") String keyword) {
+        return bookService.getAllBookByKeyword(keyword);
+    }
+
+
     @GetMapping("/book/{id}")
     public ResponseEntity<?> getBookByID(@PathVariable Long id){
         if(bookRepository.findById(id) == null){

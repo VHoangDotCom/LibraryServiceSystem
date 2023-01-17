@@ -295,6 +295,20 @@ public class UserController {
         return ResponseEntity.ok().body("");
     }
 
+    @PutMapping("/user/updateMoney")
+    public ResponseEntity<?> updateMoneyUserByAdmin(@RequestParam("userId") Long userId ,
+                                                    @RequestBody User user) {
+        User userExisted = userRepository.findById(userId).get();
+        if(userExisted != null){
+            user.setVirtualWallet(userExisted.getVirtualWallet()+ user.getVirtualWallet());
+            System.out.println(user);
+            userExisted = userService.updateUserByID(userId, user);
+            return ResponseEntity.ok(userExisted);
+        }else{
+            return ResponseEntity.badRequest().body("Cannot find User with Id " + userId);
+        }
+    }
+
     private String passwordResetTokenMail(User user, String applicationUrl, String token) {
        /* String url =
                 applicationUrl + "/savePassword?token="

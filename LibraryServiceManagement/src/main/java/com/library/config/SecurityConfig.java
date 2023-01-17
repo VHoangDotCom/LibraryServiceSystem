@@ -36,7 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/login/**",
             "/api/token/refresh",
             "/api/download/{fileId}",
-            "/api/menus/search?keyword=**",
             "/api/user/username/{username}",
             "/api/user/email/{email}",
 
@@ -51,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/books",
             "/api/book/{id}",
             "/api/books/category/{cateId}",
+            "/api/books/search",
 
             //Order
             "/api/orders/export-to-excel-single",
@@ -58,6 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //Notification
             "/api/notifications",
             "/api/notification/{id}",
+
+            //Order Item
 
     };
 
@@ -124,6 +126,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             //Order Item
             "/api/order_items",
+            "/api/order_items/user",
+            "/api/order_items/date-year",
+            "/api/order_items/date",
+            "/api/order_items/user-year",
+            "/api/order_items/user-date",
+            "/api/order_items/user-date/{userID}",
+            "/api/order_items/total-profit",
+            "/api/order_items/total-profit-year",
+            "/api/order_items/total-profit-year-month",
+            "/api/order_items/user/total-profit-year",
+            "/api/order_items/user/total-profit-date",
 
             //Notification
             "/api/notifications/user/{userId}"
@@ -147,9 +160,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] ALLOW_PUT_ADMIN_URLS = {
             "/api/books/save/{id}/**",
             "/api/categories/save/{id}/**",
+
             "/api/orders/save/**",
             "/api/order_items/save/**",
+
             "/api/user/update/**",
+            "/api/user/updateMoney/**",
+
             "/api/notifications/save/{id}/**"
     };
 
