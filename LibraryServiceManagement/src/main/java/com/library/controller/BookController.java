@@ -53,6 +53,16 @@ public class BookController {
         }
     }
 
+    @GetMapping("/books/cateID-search")
+    public ResponseEntity<?> getBookByCateIDAndKeyword(@RequestParam("cateID") Long cateID,
+                                                       @RequestParam("keyword") String keyword){
+        if(bookService.getAllBookByCateIDAndKeyword(cateID, keyword) == null){
+            return ResponseEntity.ok().body("List books is empty!");
+        }else{
+            return ResponseEntity.ok().body(bookService.getAllBookByCateIDAndKeyword(cateID, keyword));
+        }
+    }
+
     @PostMapping("/books/add")
     public Book createBook(@RequestParam("categoryId") Long categoryId ,@RequestBody Book book) {
         Category categoryFind = categoryRepository.findById(categoryId).get();
