@@ -276,6 +276,10 @@
 - http://localhost:8080/api/books/search?keyword=sc
 - Get
 
+8. Get List Book by CateID & Keyword
+- http://localhost:8080/api/books/cateID-search?cateID=8&keyword=gold
+- Get
+
 
 ## Order (Thao tác như Category )
 1. Get List Orders - Role Admin

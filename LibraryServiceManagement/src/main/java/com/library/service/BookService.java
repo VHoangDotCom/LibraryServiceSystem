@@ -16,4 +16,5 @@ public interface BookService {
     Book updateBook(Long id, Book book);
 
     List<Book> getAllBookByKeyword(String keyword);
+    List<Book> getAllBookByCateIDAndKeyword(Long cateID, String keyword);
 }

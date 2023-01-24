@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/book/{id}",
             "/api/books/category/{cateId}",
             "/api/books/search",
+            "/api/books/cateID-search",
 
             //Order
             "/api/orders/export-to-excel-single",

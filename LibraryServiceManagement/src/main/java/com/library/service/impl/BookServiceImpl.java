@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -50,6 +51,18 @@ public class BookServiceImpl implements BookService {
     public List<Book> getAllBookByCategoryID(Long cateID) {
         log.info("Fetching all books by cateID");
         return  bookRepository.getAllBookByCategoryID(cateID);
+    }
+
+    @Override
+    public List<Book> getAllBookByCateIDAndKeyword(Long cateID, String keyword){
+        List<Book> getByKeyword = bookRepository.getAllBooksByKeyword(keyword);
+        List<Book> getByCateIDAndKeyword = new ArrayList<Book>();
+        for (Book book : getByKeyword){
+            if(book.getCategory().getCategoryId() == cateID){
+                getByCateIDAndKeyword.add(book);
+            }
+        }
+        return getByCateIDAndKeyword;
     }
 
     @Override
