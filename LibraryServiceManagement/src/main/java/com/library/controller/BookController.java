@@ -8,6 +8,7 @@ import com.library.repository.CategoryRepository;
 import com.library.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class BookController {
     @GetMapping("/book/{id}")
     public ResponseEntity<?> getBookByID(@PathVariable Long id){
         if(bookRepository.findById(id) == null){
-            return ResponseEntity.ok().body("Book with id "+id+" is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book with id "+id+" is not existed !");
         }else {
             return ResponseEntity.ok().body(bookRepository.findById(id));
         }
@@ -47,7 +48,7 @@ public class BookController {
     @GetMapping("/books/category/{cateId}")
     public ResponseEntity<?> getBookByCateID(@PathVariable Long cateId){
         if(bookService.getAllBookByCategoryID(cateId) == null){
-            return ResponseEntity.ok().body("List books is empty!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List books is empty!");
         }else{
             return ResponseEntity.ok().body(bookService.getAllBookByCategoryID(cateId));
         }
@@ -57,7 +58,7 @@ public class BookController {
     public ResponseEntity<?> getBookByCateIDAndKeyword(@RequestParam("cateID") Long cateID,
                                                        @RequestParam("keyword") String keyword){
         if(bookService.getAllBookByCateIDAndKeyword(cateID, keyword) == null){
-            return ResponseEntity.ok().body("List books is empty!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List books is empty!");
         }else{
             return ResponseEntity.ok().body(bookService.getAllBookByCateIDAndKeyword(cateID, keyword));
         }

@@ -9,6 +9,7 @@ import com.library.service.NotificationService;
 import com.library.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,9 +73,9 @@ public class OrderItemController {
         int day_range = Integer.parseInt(String.valueOf((returnTime - borrowTime)/(1000 * 60 * 60 * 24)));
 
         if(orderItem.getQuantity() >= 10) {
-            return ResponseEntity.ok().body("Cannot borrow over 10 book items");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot borrow over 10 book items");
         }else if(orderItem.getQuantity() >= bookFind.getAmount()){
-            return ResponseEntity.ok().body("Store doesn't have enough book! Please decrease your Borrow Book!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Store doesn't have enough book! Please decrease your Borrow Book!");
         }else{
             //Update lại số lượng sách tồn kho
             bookFind.setAmount(bookFind.getAmount() - orderItem.getQuantity());
@@ -101,7 +102,7 @@ public class OrderItemController {
         orderItem.setBook(bookFind);
 
         if(orderItem.getQuantity() >= bookFind.getAmount()){
-            return ResponseEntity.ok().body("Store doesn't have enough books! Please decrease your amount of Book!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Store doesn't have enough books! Please decrease your amount of Book!");
         }else{
             //Update lại số lượng sách tồn kho
             bookFind.setAmount(bookFind.getAmount() - orderItem.getQuantity());
@@ -180,7 +181,7 @@ public class OrderItemController {
 
         if(orderItem.getQuantity() >= 10) {
             //Trường hợp mượn quá 10 cuốn
-            return ResponseEntity.ok().body("Cannot borrow over 10 book items");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot borrow over 10 book items");
         }
         if(orderItem.getQuantity() <= orderItemExisted.getQuantity()){
             //Trường hợp số sách mượn update <= số sách mượn trước đó
@@ -196,7 +197,7 @@ public class OrderItemController {
             //Trường hợp số sách mượn update > số sách mượn trước đó
             if( (orderItem.getQuantity() - orderItemExisted.getQuantity()) >= bookFind.getAmount()){
                 //Số sách mượn thêm vượt quá lượng sách tồn kho
-                return ResponseEntity.ok().body("Store doesn't have enough book! Please decrease your Borrow Book!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Store doesn't have enough book! Please decrease your Borrow Book!");
             }else{
                 //Số sách mượn thêm vừa đủ cho lượng sách tồn kho
                 bookFind.setAmount(bookFind.getAmount() - (orderItem.getQuantity() - orderItemExisted.getQuantity()));
@@ -233,7 +234,7 @@ public class OrderItemController {
             //Trường hợp số sách mua update > số sách mua trước đó
             if( (orderItem.getQuantity() - orderItemExisted.getQuantity()) >= bookFind.getAmount()){
                 //Số sách mua thêm vượt quá lượng sách tồn kho
-                return ResponseEntity.ok().body("Store doesn't have enough book! Please decrease your amount of Books!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Store doesn't have enough book! Please decrease your amount of Books!");
             }else{
                 //Số sách mua thêm vừa đủ cho lượng sách tồn kho
                 bookFind.setAmount(bookFind.getAmount() - (orderItem.getQuantity() - orderItemExisted.getQuantity()));

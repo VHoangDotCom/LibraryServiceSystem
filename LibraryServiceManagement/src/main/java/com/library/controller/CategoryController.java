@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.validation.annotation.Validated;
@@ -38,7 +39,7 @@ public class CategoryController {
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getCategoryByID(@PathVariable Long id){
         if(categoryRepository.findById(id) == null){
-            return ResponseEntity.ok().body("Category with id "+id+" is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category with id "+id+" is not existed !");
         }else {
             return ResponseEntity.ok().body(categoryRepository.findById(id));
         }
