@@ -57,7 +57,7 @@ public class UserController {
     @GetMapping("/user/username/{username}")
     public ResponseEntity<?> getUserByUsername(@PathVariable String username){
         if(userService.getUser(username) == null){
-            return ResponseEntity.ok().body("Username "+username+" is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Username "+username+" is not existed !");
         }else {
             return ResponseEntity.ok().body(userService.getUser(username));
         }
@@ -66,7 +66,7 @@ public class UserController {
     @GetMapping("/user/email/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable String email){
         if(userService.findUserByEmail(email) == null){
-            return ResponseEntity.ok().body("User with email "+email+" is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with email "+email+" is not existed !");
         }else {
             return ResponseEntity.ok().body(userService.findUserByEmail(email));
         }
@@ -75,7 +75,7 @@ public class UserController {
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUserByID(@PathVariable Long id){
         if(userRepository.findById(id) == null){
-            return ResponseEntity.ok().body("User with id "+id+" is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id "+id+" is not existed !");
         }else {
             return ResponseEntity.ok().body(userRepository.findById(id));
         }

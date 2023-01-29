@@ -87,7 +87,7 @@ public class OrderController {
     @GetMapping("/order/{id}")
     public ResponseEntity<?> getOrderByID(@PathVariable String id){
         if(orderRepository.findById(id) == null){
-            return ResponseEntity.ok().body("Order with code "+id+" is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order with code "+id+" is not existed !");
         }else {
             return ResponseEntity.ok().body(orderRepository.findById(id));
         }
@@ -127,7 +127,7 @@ public class OrderController {
         if(userFind != null){
             if(orderExisted.getType() == Order.OrderType.DIRECTLY || orderExisted.getType() == Order.OrderType.PAYPAL){
                 if(orderExisted.getTotalDeposit() > userFind.getVirtualWallet()){
-                    return ResponseEntity.ok().body("Your balance in Virtual Wallet is not enough to order!" +
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Your balance in Virtual Wallet is not enough to order!" +
                             "\nPlease insert more to continue shopping!");
                 }else{
                     orderExisted.setStatus(Order.OrderStatus.AVAILABLE);
@@ -166,7 +166,7 @@ public class OrderController {
             }
             else if (orderExisted.getType() == Order.OrderType.VIRTUAL_WALLET){
                 if(orderExisted.getTotalDeposit() + orderExisted.getTotalRent() > userFind.getVirtualWallet()){
-                    return ResponseEntity.ok().body("Your balance in Virtual Wallet is not enough to order!" +
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Your balance in Virtual Wallet is not enough to order!" +
                             "\nPlease insert more to continue shopping!");
                 }else{
                     orderExisted.setStatus(Order.OrderStatus.AVAILABLE);
@@ -202,7 +202,7 @@ public class OrderController {
                 }
             }
         }else{
-            return ResponseEntity.badRequest().body("Cannot find User Email or this order is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find User Email or this order is not existed !");
         }
         return ResponseEntity.ok().body("");
     }
@@ -219,7 +219,7 @@ public class OrderController {
         if(userFind != null){
             if(orderExisted.getType() == Order.OrderType.VIRTUAL_WALLET){
                 if(orderExisted.getTotalDeposit() > userFind.getVirtualWallet()){
-                    return ResponseEntity.ok().body("Your balance in Virtual Wallet is not enough to order!" +
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Your balance in Virtual Wallet is not enough to order!" +
                             "\nPlease insert more to continue shopping!");
                 }else{
                     orderExisted.setStatus(Order.OrderStatus.COMPLETED);
@@ -281,7 +281,7 @@ public class OrderController {
                         "Please check your email to confirm!\n" );
             }
         }else{
-            return ResponseEntity.badRequest().body("Cannot find User Email or this order is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find User Email or this order is not existed !");
         }
     }
 

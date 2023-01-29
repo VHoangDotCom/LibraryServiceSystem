@@ -10,6 +10,7 @@ import com.library.repository.UserRepository;
 import com.library.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class NotificationController {
     @GetMapping("/notification/{id}")
     public ResponseEntity<?> getNotificationByID(@PathVariable Long id){
         if(notificationRepository.findById(id) == null){
-            return ResponseEntity.ok().body("Notification with id "+id+" is not existed !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Notification with id "+id+" is not existed !");
         }else {
             return ResponseEntity.ok().body(notificationRepository.findById(id));
         }
@@ -42,7 +43,7 @@ public class NotificationController {
     @GetMapping("/notifications/user/{userId}")
     public ResponseEntity<?> getNotificationByUserID(@PathVariable Long userId){
         if(notificationService.getAllNotificationByUserID(userId) == null){
-            return ResponseEntity.ok().body("List Notifications is empty!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List Notifications is empty!");
         }else{
             return ResponseEntity.ok().body(notificationService.getAllNotificationByUserID(userId));
         }
