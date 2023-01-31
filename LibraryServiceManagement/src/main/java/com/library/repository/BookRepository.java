@@ -1,12 +1,14 @@
 package com.library.repository;
 
 import com.library.entity.Book;
+import com.library.entity.dto.BookTopSellerDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Tuple;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +32,32 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             nativeQuery = true
     )
     List<Book> getAllBooksByKeyword(String keyword);
+
+    /*@Query(
+            value = "SELECT p.*, " +
+                    "  sum(c.quantity) from as 'Total Buy' " +
+                    " from book p inner join order_item c on p.id = c.book_id " +
+                    " inner join orders o on c.order_id = o.order_id " +
+                    " where o.status = 'AVAILABLE' " +
+                    " group by p.title " +
+                    " order by sum(c.quantity) desc " +
+                    " limit 0, :topNumber",
+            nativeQuery = true
+    )
+   List<Tuple> getTop_Number_Book_Best_Seller(int topNumber);*/
+
+    @Query(
+            value = "SELECT p.id, p.title, p.detail, p.author, p.borrow_price, p.price, p.language, p.publisher, " +
+                    " p.subject, p.thumbnail , sum(c.quantity) " +
+                    " from book p inner join order_item c on p.id = c.book_id " +
+                    " inner join orders o on c.order_id = o.order_id " +
+                    " where o.status = 'AVAILABLE' " +
+                    " group by p.title " +
+                    " order by sum(c.quantity) desc " +
+                    " limit 0, :topNumber",
+            nativeQuery = true
+    )
+    List<Tuple> getTop_Number_Book_Best_Seller(int topNumber);
 
     // Find employee by Email
    /* @Query(value = "SELECT * FROM employees u WHERE u.email = :emailAddress", nativeQuery = true)

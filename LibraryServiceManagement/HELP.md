@@ -280,6 +280,9 @@
 - http://localhost:8080/api/books/cateID-search?cateID=8&keyword=gold
 - Get
 
+9. Get Top Seller Books (truyen tham so so sach muon lay)
+- http://localhost:8080/api/books/best-seller/top?topNumber=4
+- Get
 
 ## Order (Thao tác như Category )
 1. Get List Orders - Role Admin
