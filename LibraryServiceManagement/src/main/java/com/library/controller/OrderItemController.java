@@ -73,9 +73,9 @@ public class OrderItemController {
         int day_range = Integer.parseInt(String.valueOf((returnTime - borrowTime)/(1000 * 60 * 60 * 24)));
 
         if(orderItem.getQuantity() >= 10) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot borrow over 10 book items");
+            return ResponseEntity.badRequest().body("Cannot borrow over 10 book items");
         }else if(orderItem.getQuantity() >= bookFind.getAmount()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Store doesn't have enough book! Please decrease your Borrow Book!");
+            return ResponseEntity.badRequest().body("Store doesn't have enough book! Please decrease your Borrow Book!");
         }else{
             //Update lại số lượng sách tồn kho
             bookFind.setAmount(bookFind.getAmount() - orderItem.getQuantity());
@@ -102,7 +102,7 @@ public class OrderItemController {
         orderItem.setBook(bookFind);
 
         if(orderItem.getQuantity() >= bookFind.getAmount()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Store doesn't have enough books! Please decrease your amount of Book!");
+            return ResponseEntity.badRequest().body("Store doesn't have enough books! Please decrease your amount of Book!");
         }else{
             //Update lại số lượng sách tồn kho
             bookFind.setAmount(bookFind.getAmount() - orderItem.getQuantity());
@@ -234,7 +234,7 @@ public class OrderItemController {
             //Trường hợp số sách mua update > số sách mua trước đó
             if( (orderItem.getQuantity() - orderItemExisted.getQuantity()) >= bookFind.getAmount()){
                 //Số sách mua thêm vượt quá lượng sách tồn kho
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Store doesn't have enough book! Please decrease your amount of Books!");
+                return ResponseEntity.badRequest().body("Store doesn't have enough book! Please decrease your amount of Books!");
             }else{
                 //Số sách mua thêm vừa đủ cho lượng sách tồn kho
                 bookFind.setAmount(bookFind.getAmount() - (orderItem.getQuantity() - orderItemExisted.getQuantity()));
