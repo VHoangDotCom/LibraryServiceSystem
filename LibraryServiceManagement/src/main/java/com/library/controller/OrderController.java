@@ -164,7 +164,8 @@ public class OrderController {
                             "Please check your email to confirm!\n" );
                 }
             }
-            else if (orderExisted.getType() == Order.OrderType.VIRTUAL_WALLET){
+            //else if (orderExisted.getType() == Order.OrderType.VIRTUAL_WALLET)
+            else {
                 if(orderExisted.getTotalDeposit() + orderExisted.getTotalRent() > userFind.getVirtualWallet()){
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Your balance in Virtual Wallet is not enough to order!" +
                             "\nPlease insert more to continue shopping!");
@@ -204,7 +205,7 @@ public class OrderController {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot find User Email or this order is not existed !");
         }
-        return ResponseEntity.ok().body("");
+        //return ResponseEntity.ok().body("");
     }
 
     @GetMapping("/orders/checkout-buying-success")
