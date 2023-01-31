@@ -64,6 +64,11 @@ public class BookController {
         }
     }
 
+    @GetMapping("/books/best-seller/top")
+    public ResponseEntity<?> getTopBestSeller(@RequestParam("topNumber") int topNumber){
+        return ResponseEntity.ok().body(bookService.getTopSellerOfBook(topNumber));
+    }
+
     @PostMapping("/books/add")
     public Book createBook(@RequestParam("categoryId") Long categoryId ,@RequestBody Book book) {
         Category categoryFind = categoryRepository.findById(categoryId).get();

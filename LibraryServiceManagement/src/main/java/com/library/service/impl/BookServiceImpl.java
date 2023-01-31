@@ -2,6 +2,7 @@ package com.library.service.impl;
 
 import com.library.entity.Book;
 import com.library.entity.Category;
+import com.library.entity.dto.BookTopSellerDto;
 import com.library.exception.ResourceNotFoundException;
 import com.library.repository.BookRepository;
 import com.library.repository.CategoryRepository;
@@ -9,22 +10,27 @@ import com.library.service.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.Tuple;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
-    private CategoryRepository categoryRepository;
+    private EntityManagerFactory emf;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository , EntityManagerFactory emf) {
         this.bookRepository = bookRepository;
+        this.emf = emf;
     }
 
     @Override
@@ -66,6 +72,33 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> getAllBookByKeyword(String keyword) {
+        return bookRepository.getAllBooksByKeyword(keyword);
+    }
+
+    @Override
+    public List<BookTopSellerDto> getTopSellerOfBook(int topNumber){
+        List<Tuple> getTopSeller = bookRepository.getTop_Number_Book_Best_Seller(topNumber);
+
+        List<BookTopSellerDto> topSellerDtos = getTopSeller.stream()
+                .map(t -> new BookTopSellerDto(
+                        t.get(0, BigInteger.class),
+                        t.get(1, String.class),
+                        t.get(2, String.class),
+                        t.get(3, String.class),
+                        t.get(4, Integer.class),
+                        t.get(5, Integer.class),
+                        t.get(6, String.class),
+                        t.get(7, String.class),
+                        t.get(8, String.class),
+                        t.get(9, String.class),
+                        t.get(10, BigDecimal.class)
+                ))
+                .collect(Collectors.toList());
+        return topSellerDtos;
+    }
+
+    @Override
     public String deleteBook(Long id) {
         Book book = bookRepository.findById(id).get();
         if(book == null){
@@ -102,8 +135,4 @@ public class BookServiceImpl implements BookService {
         return bookExisted;
     }
 
-    @Override
-    public List<Book> getAllBookByKeyword(String keyword) {
-        return bookRepository.getAllBooksByKeyword(keyword);
-    }
 }

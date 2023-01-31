@@ -127,7 +127,7 @@ public class OrderController {
         if(userFind != null){
             if(orderExisted.getType() == Order.OrderType.DIRECTLY || orderExisted.getType() == Order.OrderType.PAYPAL){
                 if(orderExisted.getTotalDeposit() > userFind.getVirtualWallet()){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Your balance in Virtual Wallet is not enough to order!" +
+                    return ResponseEntity.badRequest().body("Your balance in Virtual Wallet is not enough to order!" +
                             "\nPlease insert more to continue shopping!");
                 }else{
                     orderExisted.setStatus(Order.OrderStatus.AVAILABLE);
@@ -167,7 +167,7 @@ public class OrderController {
             //else if (orderExisted.getType() == Order.OrderType.VIRTUAL_WALLET)
             else {
                 if(orderExisted.getTotalDeposit() + orderExisted.getTotalRent() > userFind.getVirtualWallet()){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Your balance in Virtual Wallet is not enough to order!" +
+                    return ResponseEntity.badRequest().body("Your balance in Virtual Wallet is not enough to order!" +
                             "\nPlease insert more to continue shopping!");
                 }else{
                     orderExisted.setStatus(Order.OrderStatus.AVAILABLE);
