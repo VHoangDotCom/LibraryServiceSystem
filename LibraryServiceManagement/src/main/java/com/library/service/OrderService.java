@@ -1,6 +1,7 @@
 package com.library.service;
 
 import com.library.entity.Order;
+import com.library.entity.dto.OrderOfUserDto;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,4 +15,5 @@ public interface OrderService {
     Order updateOrder(String id, Order order);
     List<Order> exportOrderToExcel(HttpServletResponse response) throws IOException;
     List<Order> exportSingleOrderToExcel(HttpServletResponse response, List<Order> orderList) throws  IOException;
+    List<OrderOfUserDto> getListOrderByUserID_InYear(long userID, int year);
 }

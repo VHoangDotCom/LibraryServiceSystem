@@ -33,19 +33,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     )
     List<Book> getAllBooksByKeyword(String keyword);
 
-    /*@Query(
-            value = "SELECT p.*, " +
-                    "  sum(c.quantity) from as 'Total Buy' " +
-                    " from book p inner join order_item c on p.id = c.book_id " +
-                    " inner join orders o on c.order_id = o.order_id " +
-                    " where o.status = 'AVAILABLE' " +
-                    " group by p.title " +
-                    " order by sum(c.quantity) desc " +
-                    " limit 0, :topNumber",
-            nativeQuery = true
-    )
-   List<Tuple> getTop_Number_Book_Best_Seller(int topNumber);*/
-
     @Query(
             value = "SELECT p.id, p.title, p.detail, p.author, p.borrow_price, p.price, p.language, p.publisher, " +
                     " p.subject, p.thumbnail , sum(c.quantity) " +
@@ -59,11 +46,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     )
     List<Tuple> getTop_Number_Book_Best_Seller(int topNumber);
 
-    // Find employee by Email
-   /* @Query(value = "SELECT * FROM employees u WHERE u.email = :emailAddress", nativeQuery = true)
-    List<Employee> findByEmailAddress(String emailAddress);
 
-    // Find Employee by FirstName and Lastname with keyword
-    @Query(value = "SELECT * FROM employees u WHERE concat(u.first_name, ' ', u.last_name) like %:name% ", nativeQuery = true)
-    List<Employee> findByName(String name);*/
 }

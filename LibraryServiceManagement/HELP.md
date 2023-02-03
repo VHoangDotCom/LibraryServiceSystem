@@ -391,6 +391,13 @@
 - Step 2: Access to email to receive confirmation
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1672218674/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Checkout_Success1_jqlt5v.png)
 
+12. Get Total Order By UserID in Month - Role Admin
+- http://localhost:8080/api/orders/user-by-month?userId=1&year=2023
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1675422297/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Total_Order_By_UserId_In_Month_hozyr7.png)
+
 
 ## OrderItem (Thao tác như Order )
 1. Get List OrderItem - Role Admin

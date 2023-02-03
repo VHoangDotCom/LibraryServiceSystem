@@ -286,6 +286,12 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/orders/user-by-month")
+    public ResponseEntity<?> getListOrderOfUserByMonth(@RequestParam("userId") Long userId,
+                                                       @RequestParam("year") int year){
+        return ResponseEntity.ok().body(orderService.getListOrderByUserID_InYear(userId, year));
+    }
+
     @GetMapping("/orders/export-to-excel")
     public void exportToExcelAllOrderData(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
