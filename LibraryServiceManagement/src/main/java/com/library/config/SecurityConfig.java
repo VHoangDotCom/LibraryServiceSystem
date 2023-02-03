@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //Order
             "/api/orders/export-to-excel-single",
 
+
             //Notification
             "/api/notifications",
             "/api/notification/{id}",
@@ -87,7 +88,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/order_items/order/**",
             "/api/orders/checkout-success/**",
             "/api/orders/checkout-buying-success/**",
-            "/api/notifications/user/{userId}"
+            "/api/notifications/user/{userId}",
+
+            "/api/order/{id}"
     };
 
     private static final String[] ALLOW_POST_MEMBER_URLS = {
@@ -123,7 +126,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             //Order
             "/api/orders",
-            "/api/order/{id}",
+
             "/api/orders/user/**",
 
             //Order Item
