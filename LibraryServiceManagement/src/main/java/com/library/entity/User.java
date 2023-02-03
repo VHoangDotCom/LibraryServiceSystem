@@ -14,7 +14,6 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +24,8 @@ public class User {
     private String username;
 
     private String password;
+
+    private String phoneNumber;
 
     @Column(unique = true)
     private String email;
@@ -43,11 +44,12 @@ public class User {
         NONE
     }
 
-    public User(String name, @NonNull String username, String password, String email, String avatar, String address, AccountStatus status, int virtualWallet, Collection<Role> roles) {
+    public User(String name, @NonNull String username, String password,String phoneNumber, String email, String avatar, String address, AccountStatus status, int virtualWallet, Collection<Role> roles) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.phoneNumber =phoneNumber;
         this.avatar = avatar;
         this.address = address;
         this.status = status;

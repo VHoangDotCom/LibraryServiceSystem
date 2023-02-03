@@ -140,6 +140,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userExisted.setUsername(user.getUsername());
         userExisted.setAvatar(user.getAvatar());
         userExisted.setAddress(user.getAddress());
+        userExisted.setPhoneNumber(user.getPhoneNumber());
         userExisted.setStatus(user.getStatus());
         userExisted.setVirtualWallet(user.getVirtualWallet());
         userExisted.setEmail(user.getEmail());
@@ -153,6 +154,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setName(user.getName());
         user.setUsername(user.getUsername());
         user.setAvatar(user.getAvatar());
+        user.setPhoneNumber(user.getPhoneNumber());
         user.setAddress(user.getAddress());
         user.setStatus(user.getStatus());
         user.setVirtualWallet(user.getVirtualWallet());
