@@ -3,6 +3,8 @@ package com.library.service.impl;
 import com.library.entity.Book;
 import com.library.entity.Order;
 import com.library.entity.User;
+import com.library.entity.dto.BookTopSellerDto;
+import com.library.entity.dto.OrderOfUserDto;
 import com.library.repository.OrderRepository;
 import com.library.repository.UserRepository;
 import com.library.service.OrderService;
@@ -12,10 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Tuple;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -56,6 +62,25 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getListOrderByUserID(Long userID){
         log.info("Fetching all orders by userID");
         return orderRepository.getAllOrderByUserID(userID);
+    }
+
+    @Override
+    public List<OrderOfUserDto> getListOrderByUserID_InYear(long userID, int year){
+        List<Tuple> getTopOrderOfUser = orderRepository.get_Top_Order_Of_User_By_Month(userID, year);
+
+        List<OrderOfUserDto> topOrderDtos = getTopOrderOfUser.stream()
+                .map(t -> new OrderOfUserDto(
+                        t.get(0, BigInteger.class),
+                        t.get(1, String.class),
+                        t.get(2, String.class),
+                        t.get(3, String.class),
+                        t.get(4, String.class),
+                        t.get(5, String.class),
+                        t.get(6, Integer.class),
+                        t.get(7, BigInteger.class)
+                ))
+                .collect(Collectors.toList());
+        return topOrderDtos;
     }
 
     @Override
