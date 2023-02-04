@@ -15,7 +15,8 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> getAllOrderByUserID(Long userId);
 
     @Query(
-            value = "SELECT s.* FROM orders s " +
+            value = "SELECT s.* " +
+                    " FROM orders s " +
                     " where s.user_id = :userId " +
                     " and s.order_id = :orderId",
             nativeQuery = true

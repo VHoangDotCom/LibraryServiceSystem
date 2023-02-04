@@ -4,6 +4,7 @@ import com.library.entity.Book;
 import com.library.entity.Order;
 import com.library.entity.User;
 import com.library.entity.dto.BookTopSellerDto;
+import com.library.entity.dto.OrderDetailDto;
 import com.library.entity.dto.OrderOfUserDto;
 import com.library.entity.dto.OrderUserInMonthDto;
 import com.library.repository.OrderRepository;
@@ -13,6 +14,7 @@ import com.library.service.export_excel.ExcelExportOrders;
 import com.library.service.export_excel.ExcelExportUsers;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
+
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Tuple;
@@ -66,8 +68,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderDetailByUserID(Long userID, String orderId){
-        return orderRepository.getOrderDetailByUserID(userID, orderId);
+    public OrderDetailDto getOrderDetailByUserID(Long userID, String orderId){
+        Order getOrderDetail = orderRepository.getOrderDetailByUserID(userID, orderId);
+
+        OrderDetailDto orderDetailDto = new OrderDetailDto();
+        orderDetailDto.setOrderId(getOrderDetail.getOrderId());
+        orderDetailDto.setAddress(getOrderDetail.getAddress());
+        orderDetailDto.setEmail(getOrderDetail.getEmail());
+        orderDetailDto.setFullName(getOrderDetail.getFullName());
+        orderDetailDto.setPhoneNumber(getOrderDetail.getPhoneNumber());
+        orderDetailDto.setStatus(getOrderDetail.getStatus());
+        orderDetailDto.setType(getOrderDetail.getType());
+        orderDetailDto.setTotalDeposit(getOrderDetail.getTotalDeposit());
+        orderDetailDto.setTotalRent(getOrderDetail.getTotalRent());
+        orderDetailDto.setCreatedAt(getOrderDetail.getCreatedAt());
+        orderDetailDto.setUpdatedAt(getOrderDetail.getUpdatedAt());
+
+        return orderDetailDto;
     }
 
     @Override

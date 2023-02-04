@@ -9,6 +9,7 @@ import com.library.entity.Book;
 import com.library.entity.Order;
 import com.library.entity.OrderItem;
 import com.library.entity.User;
+import com.library.entity.dto.OrderDetailDto;
 import com.library.entity.email.MailRequest;
 import com.library.repository.OrderItemRepository;
 import com.library.repository.OrderRepository;
@@ -97,10 +98,10 @@ public class OrderController {
                 String username = decodedJWT.getSubject();
                 User user = userService.getUser(username);
 
-                Order orderDetail = orderService.getOrderDetailByUserID(user.getId(), orderId);
-                List<Book> bookInOrder = bookService.getListBook_InOrder(orderDetail.getOrderId());
+                OrderDetailDto orderDetailDto = orderService.getOrderDetailByUserID(user.getId(), orderId);
+                List<Book> bookInOrder = bookService.getListBook_InOrder(orderDetailDto.getOrderId());
 
-                return ResponseEntity.ok().body(orderDetail + "\nBook List: \n" + bookInOrder);
+                return ResponseEntity.ok().body(orderDetailDto + "\nBook List: \n" + bookInOrder);
             } catch (Exception exception) {
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(HttpStatus.FORBIDDEN.value());
