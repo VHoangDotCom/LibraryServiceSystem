@@ -51,6 +51,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                     " inner join order_item c on p.id = c.book_id " +
                     " inner join orders o on c.order_id = o.order_id " +
                     " where o.order_id = :orderId " +
+                    " group by p.id " +
                     " order by p.id ",
             nativeQuery = true
     )

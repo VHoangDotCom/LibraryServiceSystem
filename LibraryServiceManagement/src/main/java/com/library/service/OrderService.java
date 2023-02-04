@@ -1,6 +1,7 @@
 package com.library.service;
 
 import com.library.entity.Order;
+import com.library.entity.dto.OrderDetailDto;
 import com.library.entity.dto.OrderOfUserDto;
 import com.library.entity.dto.OrderUserInMonthDto;
 
@@ -18,5 +19,5 @@ public interface OrderService {
     List<Order> exportSingleOrderToExcel(HttpServletResponse response, List<Order> orderList) throws  IOException;
     List<OrderOfUserDto> getListOrderByUserID_InYear(long userID, int year);
     List<OrderUserInMonthDto> getListTotalByUserID_InYear(long userId, int year);
-    Order getOrderDetailByUserID(Long userID, String orderId);
+    OrderDetailDto getOrderDetailByUserID(Long userID, String orderId);
 }
