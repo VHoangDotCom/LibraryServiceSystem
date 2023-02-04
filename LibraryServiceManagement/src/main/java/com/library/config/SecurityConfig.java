@@ -88,9 +88,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/order_items/order/**",
             "/api/orders/checkout-success/**",
             "/api/orders/checkout-buying-success/**",
+            "/api/orders/order-detail-user-account",
             "/api/notifications/user/{userId}",
 
-            "/api/order/{id}"
     };
 
     private static final String[] ALLOW_POST_MEMBER_URLS = {
@@ -126,9 +126,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             //Order
             "/api/orders",
-
+            "/api/order/{id}",
             "/api/orders/user/**",
             "/api/orders/user-by-month",
+            "/api/orders/user-total-year",
 
             //Order Item
             "/api/order_items",

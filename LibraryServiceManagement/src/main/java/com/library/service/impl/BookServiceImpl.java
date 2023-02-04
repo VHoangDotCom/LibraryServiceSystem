@@ -77,6 +77,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> getListBook_InOrder(String orderId){
+        return bookRepository.getListBook_InOrder(orderId);
+    }
+
+    @Override
     public List<BookTopSellerDto> getTopSellerOfBook(int topNumber){
         List<Tuple> getTopSeller = bookRepository.getTop_Number_Book_Best_Seller(topNumber);
 

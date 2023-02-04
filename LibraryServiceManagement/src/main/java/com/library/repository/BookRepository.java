@@ -46,5 +46,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     )
     List<Tuple> getTop_Number_Book_Best_Seller(int topNumber);
 
+    @Query(
+            value = "select p.* from book p " +
+                    " inner join order_item c on p.id = c.book_id " +
+                    " inner join orders o on c.order_id = o.order_id " +
+                    " where o.order_id = :orderId " +
+                    " order by p.id ",
+            nativeQuery = true
+    )
+    List<Book> getListBook_InOrder(String orderId);
 
 }

@@ -51,7 +51,8 @@ public class Book {
         OUT_OF_STOCK,
         AVAILABLE,
         UNAVAILABLE,
-        UPDATING
+        UPDATING,
+        HOT
     }
 
 }
