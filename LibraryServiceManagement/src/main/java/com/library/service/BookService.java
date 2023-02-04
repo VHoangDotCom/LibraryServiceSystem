@@ -19,4 +19,5 @@ public interface BookService {
     List<Book> getAllBookByKeyword(String keyword);
     List<Book> getAllBookByCateIDAndKeyword(Long cateID, String keyword);
     List<BookTopSellerDto> getTopSellerOfBook(int topNumber);
+    List<Book> getListBook_InOrder(String orderId);
 }

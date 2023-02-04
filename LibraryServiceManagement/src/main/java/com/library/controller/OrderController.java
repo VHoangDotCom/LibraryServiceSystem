@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.library.entity.Book;
 import com.library.entity.Order;
 import com.library.entity.OrderItem;
 import com.library.entity.User;
@@ -12,10 +13,7 @@ import com.library.entity.email.MailRequest;
 import com.library.repository.OrderItemRepository;
 import com.library.repository.OrderRepository;
 import com.library.repository.UserRepository;
-import com.library.service.MailService;
-import com.library.service.OrderItemService;
-import com.library.service.OrderService;
-import com.library.service.UserService;
+import com.library.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -45,6 +43,7 @@ public class OrderController {
     private final MailService mailService;
     private final OrderItemService orderItemService;
     private final OrderItemRepository orderItemRepository;
+    private final BookService bookService;
 
     @GetMapping("/orders")
     public List<Order> getAllOrders() {
@@ -69,6 +68,39 @@ public class OrderController {
                 User user = userService.getUser(username);
 
                 return ResponseEntity.ok().body(orderService.getListOrderByUserID(user.getId()));
+            } catch (Exception exception) {
+                response.setHeader("error", exception.getMessage());
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                Map<String, String> error = new HashMap<>();
+                error.put("access_message", exception.getMessage());
+                response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
+            }
+        } else {
+            //throw new RuntimeException("Access token is missing !");
+            return  ResponseEntity.ok().body(new RuntimeException("Access token is missing !"));
+        }
+        return ResponseEntity.ok().body("");
+    }
+
+    @GetMapping("/orders/order-detail-user-account")
+    public ResponseEntity<?> GetOrderDetailByLoggedInMember(HttpServletRequest request,
+                                                            HttpServletResponse response,
+                                                            @RequestParam("orderId") String orderId) throws IOException {
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            try {
+                String refresh_token = authorizationHeader.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(refresh_token);
+                String username = decodedJWT.getSubject();
+                User user = userService.getUser(username);
+
+                Order orderDetail = orderService.getOrderDetailByUserID(user.getId(), orderId);
+                List<Book> bookInOrder = bookService.getListBook_InOrder(orderDetail.getOrderId());
+
+                return ResponseEntity.ok().body(orderDetail + "\nBook List: \n" + bookInOrder);
             } catch (Exception exception) {
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(HttpStatus.FORBIDDEN.value());
@@ -290,6 +322,12 @@ public class OrderController {
     public ResponseEntity<?> getListOrderOfUserByMonth(@RequestParam("userId") Long userId,
                                                        @RequestParam("year") int year){
         return ResponseEntity.ok().body(orderService.getListOrderByUserID_InYear(userId, year));
+    }
+
+    @GetMapping("/orders/user-total-year")
+    public ResponseEntity<?> getTotalOrderOfUserInYear(@RequestParam("userId") Long userId,
+                                                       @RequestParam("year") int year){
+        return ResponseEntity.ok().body(orderService.getListTotalByUserID_InYear(userId, year));
     }
 
     @GetMapping("/orders/export-to-excel")

@@ -5,6 +5,7 @@ import com.library.entity.Order;
 import com.library.entity.User;
 import com.library.entity.dto.BookTopSellerDto;
 import com.library.entity.dto.OrderOfUserDto;
+import com.library.entity.dto.OrderUserInMonthDto;
 import com.library.repository.OrderRepository;
 import com.library.repository.UserRepository;
 import com.library.service.OrderService;
@@ -65,6 +66,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order getOrderDetailByUserID(Long userID, String orderId){
+        return orderRepository.getOrderDetailByUserID(userID, orderId);
+    }
+
+    @Override
     public List<OrderOfUserDto> getListOrderByUserID_InYear(long userID, int year){
         List<Tuple> getTopOrderOfUser = orderRepository.get_Top_Order_Of_User_By_Month(userID, year);
 
@@ -81,6 +87,21 @@ public class OrderServiceImpl implements OrderService {
                 ))
                 .collect(Collectors.toList());
         return topOrderDtos;
+    }
+
+    @Override
+    public List<OrderUserInMonthDto> getListTotalByUserID_InYear(long userId, int year){
+        List<Tuple> getTotalOrderByUser = orderRepository.get_Report_Order_Of_User_In_Year(userId,year);
+
+        List<OrderUserInMonthDto> getOrderDtos = getTotalOrderByUser.stream()
+                .map(t -> new OrderUserInMonthDto(
+                        t.get(0, Integer.class),
+                        t.get(1, BigDecimal.class),
+                        t.get(2, BigDecimal.class),
+                        t.get(3, BigDecimal.class)
+                ))
+                .collect(Collectors.toList());
+        return getOrderDtos;
     }
 
     @Override

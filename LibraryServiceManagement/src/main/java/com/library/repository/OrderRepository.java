@@ -15,16 +15,37 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> getAllOrderByUserID(Long userId);
 
     @Query(
+            value = "SELECT s.* FROM orders s " +
+                    " where s.user_id = :userId " +
+                    " and s.order_id = :orderId",
+            nativeQuery = true
+    )
+    Order getOrderDetailByUserID(Long userId, String orderId);
+
+    @Query(
             value = "SELECT p.id, p.name, p.user_name, p.phone_number, p.avatar, p.address, MONTH(c.created_at), " +
                     " count(c.order_id) " +
                     " from user p " +
                     " inner join orders c on p.id = c.user_id " +
                     " where p.id = :userId " +
-                    " and c.status = 'AVAILABLE' " +
+                    " and (c.status = 'AVAILABLE' or c.status = 'COMPLETED' )" +
                     " and YEAR(c.created_at) = :year " +
                     " group by MONTH(c.created_at) " +
                     " order by count(c.order_id) desc ",
             nativeQuery = true
     )
     List<Tuple> get_Top_Order_Of_User_By_Month(long userId, int year);
+
+    @Query(
+            value = " select MONTH(c.created_at), sum(c.total_deposit), sum(c.total_rent), sum(c.total_deposit) + sum(c.total_rent) " +
+                    " from user p inner join orders c on p.id = c.user_id " +
+                    " where p.id = :userId " +
+                    " and (c.status = 'AVAILABLE' or c.status = 'COMPLETED' ) " +
+                    " and YEAR(c.created_at) = :year " +
+                    " group by MONTH(c.created_at) " +
+                    " order by MONTH(c.created_at) ",
+            nativeQuery = true
+    )
+    List<Tuple> get_Report_Order_Of_User_In_Year(long userId, int year);
+
 }

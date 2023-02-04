@@ -398,6 +398,19 @@
   Value : Bearer access_token_khi_login  ( access token phải là của Admin )
   ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1675422297/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Total_Order_By_UserId_In_Month_hozyr7.png)
 
+13. Get Total Price Orders By UserID order by month - Role Admin
+- http://localhost:8080/api/orders/user-total-year?userId=1&year=2023
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Admin )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1675523255/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Total_Price_Of_Orders_Of_User_qyxvpr.png)
+
+14. Get Order detail when Logged In (Thông tin Order của tài khoản đăng nhập vào - ko cần truyền ID vào header, chỉ lấy access token)
+- http://localhost:8080/api/orders/order-detail-user-account?orderId=XbPPKg8Pvf
+- Get
+- Header : Thêm trường Authorization
+  Value : Bearer access_token_khi_login  ( access token phải là của Tài khoản đăng nhập vào )
+  ![alt text](https://res.cloudinary.com/fpt-aptech-h-n-i/image/upload/v1675526095/FPT%20-%20Sem4/API%20Final%20Project%20-%20API/api_-_Get_Order_Detail_by_Account_Logged_in_pfaw8l.png)
 
 ## OrderItem (Thao tác như Order )
 1. Get List OrderItem - Role Admin
