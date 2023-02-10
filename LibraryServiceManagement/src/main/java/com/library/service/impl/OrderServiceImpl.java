@@ -3,10 +3,7 @@ package com.library.service.impl;
 import com.library.entity.Book;
 import com.library.entity.Order;
 import com.library.entity.User;
-import com.library.entity.dto.BookTopSellerDto;
-import com.library.entity.dto.OrderDetailDto;
-import com.library.entity.dto.OrderOfUserDto;
-import com.library.entity.dto.OrderUserInMonthDto;
+import com.library.entity.dto.*;
 import com.library.repository.OrderRepository;
 import com.library.repository.UserRepository;
 import com.library.service.OrderService;
@@ -116,6 +113,19 @@ public class OrderServiceImpl implements OrderService {
                         t.get(1, BigDecimal.class),
                         t.get(2, BigDecimal.class),
                         t.get(3, BigDecimal.class)
+                ))
+                .collect(Collectors.toList());
+        return getOrderDtos;
+    }
+
+    @Override
+    public List<OrderTotalInYearDto> getOrderTotalInYear( int year){
+        List<Tuple> getTotalOrderInYear = orderRepository.get_Total_Order_By_Month(year);
+
+        List<OrderTotalInYearDto> getOrderDtos = getTotalOrderInYear.stream()
+                .map(t -> new OrderTotalInYearDto(
+                        t.get(0, Integer.class),
+                        t.get(1, BigDecimal.class)
                 ))
                 .collect(Collectors.toList());
         return getOrderDtos;

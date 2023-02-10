@@ -10,6 +10,7 @@ import com.library.entity.Order;
 import com.library.entity.OrderItem;
 import com.library.entity.User;
 import com.library.entity.dto.OrderDetailDto;
+import com.library.entity.dto.OrderDetailWithBooksDto;
 import com.library.entity.email.MailRequest;
 import com.library.repository.OrderItemRepository;
 import com.library.repository.OrderRepository;
@@ -101,7 +102,11 @@ public class OrderController {
                 OrderDetailDto orderDetailDto = orderService.getOrderDetailByUserID(user.getId(), orderId);
                 List<Book> bookInOrder = bookService.getListBook_InOrder(orderDetailDto.getOrderId());
 
-                return ResponseEntity.ok().body(orderDetailDto + "\nBook List: \n" + bookInOrder);
+                OrderDetailWithBooksDto orderDetailWithBooksDto = new OrderDetailWithBooksDto();
+                orderDetailWithBooksDto.setOrderDetailDto(orderDetailDto);
+                orderDetailWithBooksDto.setBooks(bookInOrder);
+
+                return ResponseEntity.ok().body(orderDetailWithBooksDto);
             } catch (Exception exception) {
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(HttpStatus.FORBIDDEN.value());
@@ -329,6 +334,11 @@ public class OrderController {
     public ResponseEntity<?> getTotalOrderOfUserInYear(@RequestParam("userId") Long userId,
                                                        @RequestParam("year") int year){
         return ResponseEntity.ok().body(orderService.getListTotalByUserID_InYear(userId, year));
+    }
+
+    @GetMapping("/orders/total-in-year")
+    public ResponseEntity<?> getTotalOrderInYear(@RequestParam("year") int year){
+        return ResponseEntity.ok().body(orderService.getOrderTotalInYear( year));
     }
 
     @GetMapping("/orders/export-to-excel")
