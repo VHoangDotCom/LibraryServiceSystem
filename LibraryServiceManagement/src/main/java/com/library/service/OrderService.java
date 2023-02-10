@@ -3,6 +3,7 @@ package com.library.service;
 import com.library.entity.Order;
 import com.library.entity.dto.OrderDetailDto;
 import com.library.entity.dto.OrderOfUserDto;
+import com.library.entity.dto.OrderTotalInYearDto;
 import com.library.entity.dto.OrderUserInMonthDto;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,4 +21,5 @@ public interface OrderService {
     List<OrderOfUserDto> getListOrderByUserID_InYear(long userID, int year);
     List<OrderUserInMonthDto> getListTotalByUserID_InYear(long userId, int year);
     OrderDetailDto getOrderDetailByUserID(Long userID, String orderId);
+    List<OrderTotalInYearDto> getOrderTotalInYear( int year);
 }

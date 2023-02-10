@@ -130,6 +130,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/orders/user/**",
             "/api/orders/user-by-month",
             "/api/orders/user-total-year",
+            "/api/orders/total-in-year",
 
             //Order Item
             "/api/order_items",

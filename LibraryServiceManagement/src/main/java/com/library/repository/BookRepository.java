@@ -38,7 +38,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                     " p.subject, p.thumbnail , sum(c.quantity) " +
                     " from book p inner join order_item c on p.id = c.book_id " +
                     " inner join orders o on c.order_id = o.order_id " +
-                    " where o.status = 'AVAILABLE' " +
+                    " where o.status = 'AVAILABLE' or o.status = 'COMPLETED' " +
                     " group by p.title " +
                     " order by sum(c.quantity) desc " +
                     " limit 0, :topNumber",

@@ -49,4 +49,15 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     )
     List<Tuple> get_Report_Order_Of_User_In_Year(long userId, int year);
 
+    @Query(
+            value=" select DISTINCT MONTH(c.created_at), sum(c.total_deposit) + sum(c.total_rent) " +
+                    " from orders c " +
+                    " where YEAR(c.created_at) = :year " +
+                    " and (c.status = 'AVAILABLE' or c.status = 'COMPLETED' ) " +
+                    " group by MONTH(c.created_at) " +
+                    " order by MONTH(c.created_at) ",
+            nativeQuery = true
+    )
+    List<Tuple> get_Total_Order_By_Month( int year);
+
 }
